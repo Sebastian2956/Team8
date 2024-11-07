@@ -1,3 +1,4 @@
+require('dotenv').config({ path: '../.env' });
 
 //importing express, cors and body-parser
 const express = require('express'); //framework for server
@@ -8,7 +9,7 @@ const bodyParser = require('body-parser'); //parses incoming request bodies in a
 //mongodb stuff
 const MongoClient = require('mongodb').MongoClient;
                                     //password                                    //database name
-const url = 'mongodb+srv://sebllano18:1234@cluster0.azzld.mongodb.net/Team8DB?retryWrites=true&w=majority&appName=Cluster0';
+const url = process.env.MONGODB_URI;
 const client = new MongoClient(url);
 client.connect();
 const app = express();
