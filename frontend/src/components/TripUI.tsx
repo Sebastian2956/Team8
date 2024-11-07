@@ -7,16 +7,26 @@ function TripUI(){
     let firstName: string = ud.firstName;
     let lastName: string = ud.lastName;
 
+
+    /*startDate
+endDate
+location
+description*/
     const [message,setMessage] = React.useState('');
     const [searchResults,setResults] = React.useState('');
     const [tripList,setTripList] = React.useState('');
     const [search,setSearchValue] = React.useState('');
     const [trip,setTripNameValue] = React.useState('');
+    const [start,setStartDateValue] = React.useState('');
+    const [end,setEndDateValue] = React.useState('');
+    const [location,setLocationValue] = React.useState('');
+    const [description,setDescriptionValue] = React.useState('');
+
 
     async function addTrip(event: any) : Promise<void>{
         event.preventDefault();
         alert('addTrip()' + trip);
-        let obj = {userId: userId, tripName: trip};
+        let obj = {userId: userId, tripName: trip, startDate: start, endDate: end, location: location, description: description};
         let js = JSON.stringify(obj);
         try{
             const response = await fetch('http://localhost:5000/api/addTrip',{
@@ -69,9 +79,20 @@ function TripUI(){
     function handleSearchTextChange(e: any) :void{
         setSearchValue(e.target.value);
     }
-    
     function handleTripTextChange(e: any) : void{
         setTripNameValue(e.target.value);
+    }
+    function handleStartTextChange(e: any) : void{
+        setStartDateValue(e.target.value);
+    }
+    function handleEndTextChange(e: any) : void{
+        setEndDateValue(e.target.value);
+    }
+    function handleLocationTextChange(e: any) : void{
+        setLocationValue(e.target.value);
+    }
+    function handleDescriptionTextChange(e: any) : void{
+        setDescriptionValue(e.target.value);
     }
 
     return(
@@ -83,8 +104,20 @@ function TripUI(){
                 onClick={searchTrip}> Search Trip </button><br/>
             <span id="tripSearchResult">{searchResults}</span>
             <p id="tripList">{tripList}</p><br/><br/>
-            Add: <input type="text" id = "tripName" placeholder="Trip To Add"
+            Add: <input type="text" id = "tripName" placeholder="Trip Name"
                 onChange={handleTripTextChange}/>
+
+                <input type="text" id = "startDate" placeholder="Start Date"
+                onChange={handleStartTextChange}/>
+                <input type="text" id = "endDate" placeholder="End Date"
+                onChange={handleEndTextChange}/>
+                <input type="text" id = "location" placeholder="Location"
+                onChange={handleLocationTextChange}/>
+                <input type="text" id = "startDate" placeholder="Description"
+                onChange={handleDescriptionTextChange}/>
+
+
+
             <button type="button" id="addTripButton" className="buttons"
                 onClick={addTrip}> Add Trip</button><br/>
             <span id="TripAddResult">{message}</span>
