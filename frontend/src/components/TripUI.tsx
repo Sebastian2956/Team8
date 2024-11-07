@@ -1,20 +1,69 @@
 import React, {useState} from 'react';
 
 function TripUI(){
+    let _ud: any = localStorage.getItem('user_data');
+    let ud = JSON.parse(_ud);
+    let userId: string = ud.id;
+    let firstName: string = ud.firstName;
+    let lastName: string = ud.lastName;
+
     const [message,setMessage] = React.useState('');
     const [searchResults,setResults] = React.useState('');
     const [tripList,setTripList] = React.useState('');
     const [search,setSearchValue] = React.useState('');
     const [trip,setTripNameValue] = React.useState('');
 
-    function addTrip(event: any) : void{
-        event.preventDefult();
+    async function addTrip(event: any) : Promise<void>{
+        event.preventDefault();
         alert('addTrip()' + trip);
+        let obj = {userId: userId, tripName: trip};
+        let js = JSON.stringify(obj);
+        try{
+            const response = await fetch('http://localhost:5000/api/addTrip',{
+                method: 'POST', body: js, headers: {'Content-Type': 'application/json'}
+            });
+            let txt = await response.text();
+            let res = JSON.parse(txt);
+            if (res.error.length > 0){
+                setMessage('API Error: ' + res.error);
+            }
+            else{
+                setMessage('Trip Added');
+            }
+        }catch(error: any){
+            setMessage(error.toString());
+        }
     };
 
-    function searchTrip(event: any) : void{
-        event.preventDefult();
+    async function searchTrip(event: any) : Promise<void>{
+        event.preventDefault();
         alert('searchTrip()' + search);
+
+        let obj = {userId: userId, search: search};
+        let js = JSON.stringify(obj);
+
+        try{
+            const response = await fetch('http://localhost:5000/api/searchTrips',{
+                method: 'POST', body: js, headers: {'Content-Type': 'application/json'}
+            });
+            let txt = await response.text();
+            let res = JSON.parse(txt);
+            let _results = res.results;
+            let resultText = '';
+            for(let i = 0; i < _results.length; i++){
+                resultText += _results[i].TripName;
+                if (i < _results.length - 1) {
+                    resultText += ', ';
+                }
+            }
+            setResults('Trips have been retrieved');
+            setTripList(resultText);
+            alert(resultText);
+        }
+        catch(error: any){
+            alert(error.toString());
+            setResults(error.toString());
+        }
     };
 
     function handleSearchTextChange(e: any) :void{

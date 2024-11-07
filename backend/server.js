@@ -115,12 +115,17 @@ app.post('/api/searchTrips', async (req, res, next) =>{
     const db = client.db();
     //search tripName, startDate, endDate, location, description
     const results = await db.collection('Trips').find({
-        $or: [
-            {"TripName": {$regex: _search, $options: 'i'}},
-            {"StartDate": {$regex: _search, $options: 'i'}},
-            {"EndDate": {$regex: _search, $options: 'i'}},
-            {"Location": {$regex: _search, $options: 'i'}},
-            {"Description": {$regex: _search, $options: 'i'}}
+        $and: [
+            {"UserId": userId},
+            {
+                $or: [
+                    {"TripName": {$regex: _search, $options: 'i'}},
+                    {"StartDate": {$regex: _search, $options: 'i'}},
+                    {"EndDate": {$regex: _search, $options: 'i'}},
+                    {"Location": {$regex: _search, $options: 'i'}},
+                    {"Description": {$regex: _search, $options: 'i'}}
+                ]
+            }
         ]
     }).toArray();
     var _ret = [];
