@@ -91,8 +91,8 @@ app.post('/api/addTrip', async (req, res, next) =>{
     //incoming: userId, tripName, startDate, endDate, location, description
     //outgoing: error
     var error = '';
-    const {userId, tripName, startDate, endDate, location, description} = req.body;
-    const newTrip = {UserId:userId, TripName:tripName, StartDate:startDate, EndDate:endDate, Location:location, Description:description};
+    const {userId, tripName, startDate, endDate, location, description, budget} = req.body;
+    const newTrip = {UserId:userId, TripName:tripName, StartDate:startDate, EndDate:endDate, Location:location, Description:description, Budget: budget};
 
     try{
         const db = client.db();
