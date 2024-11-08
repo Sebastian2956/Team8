@@ -1,6 +1,6 @@
 function PageTitle(){
     return(
-        <h1 id="title">Traveler</h1>
+        <h1 id="title">Let's go somewhere.</h1>
     );
 };
 

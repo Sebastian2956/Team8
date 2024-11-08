@@ -46,18 +46,23 @@ function Login(){
 
     function handleSetPassword(e: any) : void{
         setPassword(e.target.value);
-    }
+    } 
 
     return(
         <div id="loginDiv">
-            <span id="inner-title">PLEASE LOG IN</span><br/>
-            Login: <input type="text" id="loginName" placeholder="Username"
-                onChange={handleSetLoginName}/>
-            Password: <input type="password" id="loginPassword" placeholder="Password"
-                onChange={handleSetPassword}/>
-            <input type="submit" id="loginButton" className="buttons" value="Do It"
-                onClick={doLogin}/>
-            <span id="loginResult">{message}</span>
+            {/* <span id="inner-title">Log In</span><br/> */}
+            <div id="loginForm">
+                Login: 
+                <input type="text" id="loginName" placeholder="Username" onChange={handleSetLoginName}/>
+                Password: 
+                <input type="password" id="loginPassword" placeholder="Password" onChange={handleSetPassword}/>
+
+
+                <input type="submit" id="loginButton" className="buttons" value="Login"
+                    onClick={doLogin}/>
+                <span id="loginResult">{message}</span>
+            </div>
+            
         </div>
     );              //notice the onClick attribute uses {} to run function
                     //onChange is an event listener that listens for changes in the input field which is then passed to the functions handleSetLoginName and handleSetPassword

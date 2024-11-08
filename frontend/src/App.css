@@ -1,7 +1,7 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+  width: 100vw;
+  margin: 0;
+  /* padding: 2rem; */
   text-align: center;
 }
 
@@ -33,6 +33,10 @@
   }
 }
 
+#title{
+  font-size:64px;
+}
+
 .card {
   padding: 2em;
 }
@@ -45,4 +49,49 @@
   position: absolute; /* or `fixed` if you want it to remain in place while scrolling */
   top: 0;
   left: 0;
+}
+#loginForm, #login_side{
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap:8px;
+}
+#loginName, #loginPassword{
+  border-radius: 4px;
+  border-color: lightslategray;
+  border-width: 2px;
+  padding:10px;
+  font-size: 24px;
+  
+}
+
+#loginButton{
+  text-align: center;
+  border-radius: 8px;
+  border:0;
+  font-size:20px;
+  padding: 10px;
+  min-width: 200px;
+}
+
+.carousel{
+  margin: 0;
+  overflow: hidden;
+  min-height: 100vh;
+  max-width: 1680px;
+}
+
+img{
+  width: 100%;
+  height: 100vh;
+  object-fit: cover;
+}
+#LoginPage{
+  display:flex;
+  flex-direction: row;
+}
+#login_side{
+  max-width:50%;
+  width: 100vw;
 }
