@@ -68,7 +68,7 @@ function TripUI() {
     function handleTripClick(trip: any) {
         alert(`Trip clicked: ${trip.TripName}`);
 
-        var tripData = {TripName:trip.TripName, StartDate:trip.StartDate, EndDate:trip.EndDate, Location:trip.Location, Description:trip.Description, Budget:trip.Budget};
+        var tripData = {TripId: trip._id, TripName:trip.TripName, StartDate:trip.StartDate, EndDate:trip.EndDate, Location:trip.Location, Description:trip.Description, Budget:trip.Budget};
         alert(`Trip data: ${JSON.stringify(tripData)}`);
         localStorage.setItem('trip_data', JSON.stringify(tripData));
         window.location.href = '/thisTrip';

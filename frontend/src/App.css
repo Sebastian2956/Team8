@@ -40,3 +40,9 @@
 .read-the-docs {
   color: #888;
 }
+
+#flightDetails{
+  position: absolute; /* or `fixed` if you want it to remain in place while scrolling */
+  top: 0;
+  left: 0;
+}

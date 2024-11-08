@@ -137,6 +137,21 @@ app.post('/api/searchTrips', async (req, res, next) =>{
     res.status(200).json(ret);
 });
 
+app.post('/api/addFlight', async (req, res, next) =>{
+    let error = '';
+    const {tripId, airline, departureDate, departureTime, arrivalDate, arrivalTime, departureLocation, arrivalLocation, price} = req.body;
+    const newFlight = {TripId:tripId, Airline:airline, DepartureDate:departureDate, DepartureTime:departureTime, ArrivalDate:arrivalDate, ArrivalTime:arrivalTime, DepartureLocation:departureLocation, ArrivalLocation:arrivalLocation, Price:price};
+
+    try{
+        const db = client.db();
+        const result = await db.collection('Flights').insertOne(newFlight);
+    }catch(e){
+        error  = e.toString();
+    }
+    var ret = {newFlight, error: error}
+    res.status(200).json(ret);
+});
+
 
 
 app.listen(5000);

@@ -26,7 +26,7 @@ function TripDetails(){
         <span id="inner-title">End Date: {tripEndDate}</span><br/>
         <span id="inner-title">Location: {tripLocation}</span><br/>
         <span id="inner-title">Description: {tripDescription}</span><br/>
-        <span id="inner-title">Budget: {tripBudget}</span><br/>
+        <span id="inner-title">Budget: ${tripBudget}</span><br/>
         <input type="submit" id="backButton" className="buttons" value="Go Back"
                 onClick={goBack}/>
         </div>
