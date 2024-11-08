@@ -1,6 +1,7 @@
 import TripDetails from '../components/TripDetails';
 import FlightDetails from '../components/FlightDetails';
 import HotelDetails from '../components/HotelDetails';
+import DropdownMenu from '../components/DropDownMenu';
 
 const DetailedTripPage = () => {
     return(
@@ -8,6 +9,7 @@ const DetailedTripPage = () => {
             <TripDetails/>
             <FlightDetails/>
             <HotelDetails/>
+            <DropdownMenu/>
         </div>
     );
 }
