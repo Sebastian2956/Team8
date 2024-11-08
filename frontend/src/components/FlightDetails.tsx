@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import updateBudget from './Budget';
 
 function FlightDetails(){
     let _td: any = localStorage.getItem('trip_data');
@@ -34,10 +35,10 @@ function FlightDetails(){
                 setMessage('API Error: ' + res.error);
             } else {
                 setMessage('Trip Added');
+                updateBudget(tripId, parseInt(price));
             }
         }catch(error: any){
             alert(error.toString());
-
         }
     };
 
@@ -60,7 +61,10 @@ function FlightDetails(){
             <input type="text" id="arrivalLocation" placeholder="Arrival Location"
                 onChange={(e) => setArrivalLocation(e.target.value)} />
             <input type="text" id="price" placeholder="Price"
-                onChange={(e) => setPrice(e.target.value)} />
+                onChange={(e) => {
+                    let _reduce = 0 - parseInt(e.target.value);
+                    let reduce = _reduce.toString();
+                    setPrice(reduce)}} />
             <button type="button" id="addFlightButton" className="buttons"
                 onClick={addFlight}> Add Flight</button><br />
 

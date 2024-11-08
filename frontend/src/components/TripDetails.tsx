@@ -9,7 +9,8 @@ function TripDetails(){
     let tripEndDate: string = td.EndDate;
     let tripLocation: string = td.Location;
     let tripDescription: string = td.Description;
-    let tripBudget: string = td.Budget;
+    const [tripBudget, setTripBudget] = useState(td.Budget);
+    
     console.log(tripStartDate);
 
 
@@ -17,16 +18,16 @@ function TripDetails(){
         localStorage.removeItem("trip_data");
         window.location.href = '/trips';
 
-    }
+    };
 
     return(
         <div id="budgetCounter">
-        <span id="inner-title">Trip: {tripName}</span><br/>
-        <span id="inner-title">Start Date: {tripStartDate}</span><br/>
-        <span id="inner-title">End Date: {tripEndDate}</span><br/>
-        <span id="inner-title">Location: {tripLocation}</span><br/>
-        <span id="inner-title">Description: {tripDescription}</span><br/>
-        <span id="inner-title">Budget: ${tripBudget}</span><br/>
+        <span id="tripName">Trip: {tripName}</span><br/>
+        <span id="startDate">Start Date: {tripStartDate}</span><br/>
+        <span id="endDate">End Date: {tripEndDate}</span><br/>
+        <span id="location">Location: {tripLocation}</span><br/>
+        <span id="description">Description: {tripDescription}</span><br/>
+        <span id="budget">Budget: ${tripBudget}</span><br/>
         <input type="submit" id="backButton" className="buttons" value="Go Back"
                 onClick={goBack}/>
         </div>
