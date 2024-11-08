@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 
 async function updateBudget( tripId: string, amount: number): Promise<void>{
-    
+    let newBudget=0;
     let obj = {tripId, amount};
     let js = JSON.stringify(obj);
     console.log(js);
@@ -13,7 +13,7 @@ async function updateBudget( tripId: string, amount: number): Promise<void>{
         let txt = await response.text();
         let res = JSON.parse(txt);
         console.log(res);
-        let newBudget = res.newBudget;
+        newBudget = res.newBudget;
         let tripData = localStorage.getItem('trip_data');
         if (tripData) {
             let parsedData = JSON.parse(tripData);
@@ -24,10 +24,12 @@ async function updateBudget( tripId: string, amount: number): Promise<void>{
             // Step 3: Save the updated data back to localStorage
             localStorage.setItem('trip_data', JSON.stringify(parsedData));
             console.log('Budget updated in localStorage:', parsedData.Budget);
+            window.location.reload()
         }
     }catch(error: any){
         console.log(error.toString());
     }
+    
 }
 
 export default updateBudget;
