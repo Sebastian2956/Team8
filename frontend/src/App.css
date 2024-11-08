@@ -50,6 +50,12 @@
   top: 0;
   left: 0;
 }
+
+#hotelDetails{
+  position: absolute; 
+  top: .5; 
+}
+
 #loginForm, #login_side{
   display:flex;
   flex-direction: column;

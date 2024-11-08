@@ -34,7 +34,7 @@ function FlightDetails(){
             if (res.error.length > 0) {
                 setMessage('API Error: ' + res.error);
             } else {
-                setMessage('Trip Added');
+                setMessage('Flight Added');
                 updateBudget(tripId, parseInt(price));
             }
         }catch(error: any){

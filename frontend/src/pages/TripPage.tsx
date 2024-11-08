@@ -4,7 +4,7 @@ import TripUI from '../components/TripUI';
 
 const TripPage = () => {
     return(
-        <div>
+        <div id="tripPage">
             <PageTitle/>
             <LoggedInName/>
             <TripUI/>

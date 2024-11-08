@@ -214,5 +214,48 @@ app.post('/api/updateBudget', async (req, res, next) => {
     }
 });
 
-//decrease budget
+//add hotel
+app.post('/api/addFlight', async (req, res, next) =>{
+    let error = '';
+    const {tripId, airline, departureDate, departureTime, arrivalDate, arrivalTime, departureLocation, arrivalLocation, price} = req.body;
+    
+    const priceNumber = price !== undefined ? parseFloat(price) : 0.0;
+    if (isNaN(priceNumber)) {
+        return res.status(400).json({ error: 'Budget must be a valid number' });
+    }
+
+    const newFlight = {TripId:tripId, Airline:airline, DepartureDate:departureDate, DepartureTime:departureTime, ArrivalDate:arrivalDate, ArrivalTime:arrivalTime, DepartureLocation:departureLocation, ArrivalLocation:arrivalLocation, Price:priceNumber};
+
+    try{
+        const db = client.db();
+        const result = await db.collection('Flights').insertOne(newFlight);
+    }catch(e){
+        error  = e.toString();
+    }
+    var ret = {newFlight, error: error}
+    res.status(200).json(ret);
+});
+
+//add hotel
+app.post('/api/addHotel', async (req, res, next) =>{
+    let error = '';
+    const {tripId, airline, departureDate, departureTime, arrivalDate, arrivalTime, departureLocation, arrivalLocation, price} = req.body;
+    
+    const priceNumber = price !== undefined ? parseFloat(price) : 0.0;
+    if (isNaN(priceNumber)) {
+        return res.status(400).json({ error: 'Budget must be a valid number' });
+    }
+
+    const newHotel = {TripId:tripId, Airline:airline, DepartureDate:departureDate, DepartureTime:departureTime, ArrivalDate:arrivalDate, ArrivalTime:arrivalTime, DepartureLocation:departureLocation, ArrivalLocation:arrivalLocation, Price:priceNumber};
+
+    try{
+        const db = client.db();
+        const result = await db.collection('Hotels').insertOne(newHotel);
+    }catch(e){
+        error  = e.toString();
+    }
+    var ret = {newHotel, error: error}
+    res.status(200).json(ret);
+});
+
 app.listen(5000);

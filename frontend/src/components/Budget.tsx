@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 
 async function updateBudget( tripId: string, amount: number): Promise<void>{
+    
     let obj = {tripId, amount};
     let js = JSON.stringify(obj);
     console.log(js);
