@@ -1,35 +1,35 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
+import FlightDetails from './FlightDetails';
 
-async function updateBudget( tripId: string, amount: number): Promise<void>{
-    let newBudget=0;
-    let obj = {tripId, amount};
-    let js = JSON.stringify(obj);
-    console.log(js);
+const DropdownMenu: React.FC = () => {
+    const [isOpen, setIsOpen] = useState(false);
+    const [showFlightDetails, setShowFlightDetails] = useState(false);
 
-    try{
-        const response = await fetch('http://localhost:5000/api/updateBudget', {
-            method: 'POST', body: js, headers: {'Content-Type': 'application/json'}
-        });
-        let txt = await response.text();
-        let res = JSON.parse(txt);
-        console.log(res);
-        newBudget = res.newBudget;
-        let tripData = localStorage.getItem('trip_data');
-        if (tripData) {
-            let parsedData = JSON.parse(tripData);
+    const toggleDropdown = () => setIsOpen(!isOpen);
 
-            // Step 2: Update the budget value
-            parsedData.Budget = newBudget; 
+    // Function to handle showing the FlightDetails component
+    const handleShowFlightDetails = () => {
+        setShowFlightDetails(true);
+        setIsOpen(false); // Close the dropdown after selecting
+    };
 
-            // Step 3: Save the updated data back to localStorage
-            localStorage.setItem('trip_data', JSON.stringify(parsedData));
-            console.log('Budget updated in localStorage:', parsedData.Budget);
-            window.location.reload()
-        }
-    }catch(error: any){
-        console.log(error.toString());
-    }
-    
-}
+    return (
+        <div>
+            {/* Main button to open/close the dropdown */}
+            <button onClick={toggleDropdown}>Toggle Dropdown</button>
 
-export default updateBudget;
+            {/* Dropdown menu items */}
+            {isOpen && (
+                <div style={{ position: 'absolute', backgroundColor: 'lightgrey', padding: '10px', borderRadius: '4px' }}>
+                    <button onClick={handleShowFlightDetails}><FlightDetails /></button>
+                    {/* Other buttons can go here */}
+                </div>
+            )}
+
+            {/* Conditionally render FlightDetails form */}
+            {showFlightDetails && <FlightDetails />}
+        </div>
+    );
+};
+
+export default DropdownMenu;

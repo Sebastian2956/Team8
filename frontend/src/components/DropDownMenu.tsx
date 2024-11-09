@@ -1,46 +1,49 @@
 import React, { useState } from 'react';
+import FlightDetails from './FlightDetails';
+import HotelDetails from './HotelDetails';
 
-
-const DropDownMenu: React.FC = () => {
-    // State to toggle the dropdown
+const DropdownMenu: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const [showFlightDetails, setShowFlightDetails] = useState(false);
+    const [showHotelDetails, setShowHotelDetails] = useState(false);
 
-    // Function to toggle the dropdown visibility
     const toggleDropdown = () => setIsOpen(!isOpen);
 
-    // Define the actions for each button
-    const handleAction1 = () => {
-        console.log('Action 1 executed');
-        // Add your custom logic here
+    const handleShowFlightDetails = () => {
+        setShowFlightDetails(true);
+        setShowHotelDetails(false); // Hide other form if open
     };
 
-    const handleAction2 = () => {
-        console.log('Action 2 executed');
-        // Add your custom logic here
+    const handleShowHotelDetails = () => {
+        setShowHotelDetails(true);
+        setShowFlightDetails(false); // Hide other form if open
     };
 
-    const handleAction3 = () => {
-        console.log('Action 3 executed');
-        // Add your custom logic here
+    const handleClear = () => {
+        setShowFlightDetails(false);
+        setShowHotelDetails(false);
+        setIsOpen(false); //close dropdown
     };
 
     return (
         <div>
             {/* Main button to open/close the dropdown */}
-            <button onClick={toggleDropdown}>
-                Add Flight/Cruise/Hotel
-            </button>
+            <button onClick={toggleDropdown}>Toggle Dropdown</button>
 
-            {/* Dropdown menu items, shown only when isOpen is true */}
+            {/* Dropdown menu items */}
             {isOpen && (
                 <div style={{ position: 'absolute', backgroundColor: 'lightgrey', padding: '10px', borderRadius: '4px' }}>
-                    <button onClick={handleAction1}>Action 1</button>
-                    <button onClick={handleAction2}>Action 2</button>
-                    <button onClick={handleAction3}>Action 3</button>
+                    <button onClick={handleShowFlightDetails}>Add Flight</button>
+                    <button onClick={handleShowHotelDetails}>Add Hotel</button>
+                    <button onClick={handleClear}>X</button> {/* Clear button */}
                 </div>
             )}
+
+            {/* Conditionally render each component */}
+            {showFlightDetails && <FlightDetails />}
+            {showHotelDetails && <HotelDetails />}
         </div>
     );
 };
 
-export default DropDownMenu;
+export default DropdownMenu;

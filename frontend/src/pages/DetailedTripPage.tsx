@@ -7,8 +7,6 @@ const DetailedTripPage = () => {
     return(
         <div id="detailedTripPage">
             <TripDetails/>
-            <FlightDetails/>
-            <HotelDetails/>
             <DropdownMenu/>
         </div>
     );

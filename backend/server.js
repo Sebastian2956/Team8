@@ -6,14 +6,13 @@ const express = require('express'); //framework for server
 const cors = require('cors'); //Cross-Origin Resource Sharing, allows/restricts resources from being accessed by clients from different origins
 const bodyParser = require('body-parser'); //parses incoming request bodies in a middleware before your handlers, available under the req.body property
 
-
 //mongodb stuff
 const MongoClient = require('mongodb').MongoClient;
                                     //password                                    //database name
 const url = process.env.MONGODB_URI;
 const client = new MongoClient(url);
 client.connect();
-const app = express();
+const app = express(); 
 app.use(cors());
 app.use(bodyParser.json());
 
