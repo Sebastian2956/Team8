@@ -101,3 +101,19 @@ img{
   max-width:50%;
   width: 100vw;
 }
+
+#accountCreationForm{
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap:8px;
+}
+
+.textField{
+  border-radius: 4px;
+  border-color: lightslategray;
+  border-width: 2px;
+  padding:10px;
+  font-size: 24px;
+}

@@ -4,6 +4,7 @@ import {BrowserRouter as Router, Route, Routes} from 'react-router-dom'; //this 
 import LoginPage from './pages/LoginPage.tsx';
 import TripPage from './pages/TripPage.tsx';
 import DetailedTripPage from './pages/DetailedTripPage.tsx';
+import AccountCreationPage from './pages/AccountCreationPage.tsx';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route path="/" element={<LoginPage/>}/>
         <Route path="/trips" element={<TripPage/>}/>
         <Route path="/thisTrip" element={<DetailedTripPage/>}/>
+        <Route path="/createAccount" element={<AccountCreationPage/>}/>
       </Routes>
     </Router>
   );

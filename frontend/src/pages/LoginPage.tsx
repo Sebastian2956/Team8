@@ -1,6 +1,7 @@
 import PageTitle from "../components/PageTitle.tsx";
 import Login from '../components/Login.tsx';
 import ImageCarousel from "../components/ImageCarousel.tsx";
+import CreateAccountButton from "../components/CreateAccountButton.tsx";
 
 const LoginPage = () => {
     return(
@@ -9,6 +10,7 @@ const LoginPage = () => {
             <div id ="login_side">
             <PageTitle/>
             <Login/>
+            <CreateAccountButton/>
             </div>
         </div>
     );
