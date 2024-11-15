@@ -205,6 +205,7 @@ app.post('/api/updateBudget', async (req, res, next) => {
         if (result.modifiedCount === 0) {
             return res.status(404).send({ success: false, error: 'Budget not updated' });
 
+        }
 
         res.status(200).send({ success: true, newBudget });
     } catch (error) {
