@@ -12,7 +12,7 @@ const MongoClient = require('mongodb').MongoClient;
 const url = process.env.MONGODB_URI;
 const client = new MongoClient(url);
 client.connect();
-const app = express(); 
+const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
@@ -25,10 +25,10 @@ app.use((req,res,next) => {
 
     //enables CORS, allows requests from any website to this server
     res.setHeader('Access-Control-Allow-Origin', '*');
-    
+
     //specifies the headers the client may include in requests
     //Origin is a request header that specifies the URL of the page from which the request is initiated
-    //X-Requested-With identifies async requests 
+    //X-Requested-With identifies async requests
     //Content-Type specifies media type for request ie application/json
     //Accept specifies media type for response
     //Authorization is a request header that contains the credentials to authenticate a user
@@ -36,7 +36,7 @@ app.use((req,res,next) => {
         'Access-Control-Allow-Headers',
         'Origin, X-Requested-With, Content-Type, Accept, Authorization'
     );
-    
+
     res.setHeader(
         'Access-Control-Allow-Methods',
         'GET, POST, PATCH, DELETE, OPTIONS'
@@ -44,7 +44,7 @@ app.use((req,res,next) => {
     next();
 });
 
-//api endpoints       
+//api endpoints
 //login               need async to use await
 app.post('/api/login', async (req, res, next) =>{
     //incoming: login, password
@@ -148,7 +148,7 @@ app.post('/api/searchTrips', async (req, res, next) =>{
 app.post('/api/addFlight', async (req, res, next) =>{
     let error = '';
     const {tripId, airline, departureDate, departureTime, arrivalDate, arrivalTime, departureLocation, arrivalLocation, price} = req.body;
-    
+
     const priceNumber = price !== undefined ? parseFloat(price) : 0.0;
     if (isNaN(priceNumber)) {
         return res.status(400).json({ error: 'Budget must be a valid number' });
@@ -170,7 +170,7 @@ app.post('/api/addFlight', async (req, res, next) =>{
 app.post('/api/updateBudget', async (req, res, next) => {
     const {tripId, amount} = req.body;
     const amountNumber = parseFloat(amount);
-    
+
     try {
         const db = client.db();
 
@@ -178,7 +178,7 @@ app.post('/api/updateBudget', async (req, res, next) => {
         if (!ObjectId.isValid(tripId)) {
             return res.status(400).send({ success: false, error: 'Invalid tripId format' });
         }
-        
+
         // Fetch current budget
         const trip = await db.collection('Trips').findOne({ _id: new ObjectId(tripId) });
         if (!trip) {
@@ -195,7 +195,7 @@ app.post('/api/updateBudget', async (req, res, next) => {
         const newBudget = (currentBudget + amountNumber).toString();
         console.log("New Budget:", newBudget);
 
-        // Update the budget in the database
+        // Also I'm using a MERN stack, so if you please help me to get started with integrating it into my website.Update the budget in the database
         const result = await db.collection('Trips').updateOne(
             { _id: new ObjectId(tripId) },
             { $set: { Budget: newBudget } }
@@ -204,7 +204,7 @@ app.post('/api/updateBudget', async (req, res, next) => {
         console.log("Modified Count:", result.modifiedCount);
         if (result.modifiedCount === 0) {
             return res.status(404).send({ success: false, error: 'Budget not updated' });
-        }
+
 
         res.status(200).send({ success: true, newBudget });
     } catch (error) {
@@ -217,7 +217,7 @@ app.post('/api/updateBudget', async (req, res, next) => {
 app.post('/api/addFlight', async (req, res, next) =>{
     let error = '';
     const {tripId, airline, departureDate, departureTime, arrivalDate, arrivalTime, departureLocation, arrivalLocation, price} = req.body;
-    
+
     const priceNumber = price !== undefined ? parseFloat(price) : 0.0;
     if (isNaN(priceNumber)) {
         return res.status(400).json({ error: 'Budget must be a valid number' });
@@ -239,7 +239,7 @@ app.post('/api/addFlight', async (req, res, next) =>{
 app.post('/api/addHotel', async (req, res, next) =>{
     let error = '';
     const {tripId, airline, departureDate, departureTime, arrivalDate, arrivalTime, departureLocation, arrivalLocation, price} = req.body;
-    
+
     const priceNumber = price !== undefined ? parseFloat(price) : 0.0;
     if (isNaN(priceNumber)) {
         return res.status(400).json({ error: 'Budget must be a valid number' });
@@ -257,4 +257,29 @@ app.post('/api/addHotel', async (req, res, next) =>{
     res.status(200).json(ret);
 });
 
-app.listen(5000);
+// delete trip
+app.delete('/api/deleteTrip', async (req, res, next) => {
+    const { tripId } = req.body;
+
+    try {
+        const db = client.db();
+
+        // Ensure tripId is valid and convert it to ObjectId
+        if (!ObjectId.isValid(tripId)) {
+            return res.status(400).json({ error: 'Invalid tripId format' });
+        }
+
+        const result = await db.collection('Trips').deleteOne({ _id: new ObjectId(tripId) });
+
+        if (result.deletedCount === 0) {
+            return res.status(404).json({ error: 'Trip not found or already deleted' });
+        }
+
+        res.status(200).json({ message: 'Trip deleted successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'An error occurred while deleting the trip' });
+    }
+});
+
+app.listen(process.env.REACT_APP_LOCALHOST_PORT);
