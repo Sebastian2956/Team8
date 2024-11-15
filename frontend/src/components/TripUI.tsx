@@ -45,7 +45,7 @@ function TripUI() {
         const js = JSON.stringify(obj);
 
         try {
-            const response = await fetch('http://localhost:4000/api/searchTrips', {
+            const response = await fetch( LOCALHOST_PORT + '/api/searchTrips', {
                 method: 'POST', body: js, headers: { 'Content-Type': 'application/json' }
             });
             const txt = await response.text();
