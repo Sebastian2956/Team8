@@ -144,6 +144,48 @@ app.post('/api/searchTrips', async (req, res, next) =>{
     res.status(200).json(ret);
 });
 
+//update Trips
+app.put('/api/updateTrip', async (req, res, next) => 
+{
+
+    var error = '';
+    const {tripId, userId, tripName , startDate , endDate , location , description, budget} = req.body;
+    const budgetNumber = budget !== undefined ? parseFloat(budget) : 0.0;
+
+    if (isNaN(currentBudget)) 
+    {
+        return res.status(500).send({ success: false, error: 'Current budget is not a valid number' });
+    }
+    const updatedTrip = 
+    {
+        UserId: userId,
+        ...(tripName && { TripName: tripName }),
+        ...(startDate && { StartDate: startDate }),
+        ...(endDate && { EndDate: endDate }),
+        ...(location && { Location: location }),
+        ...(description && { Description: description }),
+        Budget: budgetNumber,
+    };
+
+    try {
+        const db = client.db();
+        const result = await db.collection('Trips').updateOne(
+            { _id: new ObjectId(tripId) },
+            { $set: updatedTrip }
+        );
+
+        if (result.matchedCount === 0) {
+            return res.status(404).json({ error: 'Trip not found' });
+        }
+    } catch (e) {
+        error = e.toString();
+    }
+    
+    const ret = { updatedTrip, error };
+    res.status(200).json(ret);
+
+});
+
 //add Flight
 app.post('/api/addFlight', async (req, res, next) =>{
     let error = '';
@@ -195,7 +237,7 @@ app.post('/api/updateBudget', async (req, res, next) => {
         const newBudget = (currentBudget + amountNumber).toString();
         console.log("New Budget:", newBudget);
 
-        // Also I'm using a MERN stack, so if you please help me to get started with integrating it into my website.Update the budget in the database
+        
         const result = await db.collection('Trips').updateOne(
             { _id: new ObjectId(tripId) },
             { $set: { Budget: newBudget } }
@@ -206,7 +248,6 @@ app.post('/api/updateBudget', async (req, res, next) => {
             return res.status(404).send({ success: false, error: 'Budget not updated' });
 
         }
-
         res.status(200).send({ success: true, newBudget });
     } catch (error) {
         console.log(error);
