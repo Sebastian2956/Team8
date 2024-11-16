@@ -6,6 +6,8 @@ const express = require('express'); //framework for server
 const cors = require('cors'); //Cross-Origin Resource Sharing, allows/restricts resources from being accessed by clients from different origins
 const bodyParser = require('body-parser'); //parses incoming request bodies in a middleware before your handlers, available under the req.body property
 
+let tripId = "0";
+
 //mongodb stuff
 const MongoClient = require('mongodb').MongoClient;
                                     //password                                    //database name
@@ -144,6 +146,7 @@ app.post('/api/searchTrips', async (req, res, next) =>{
     res.status(200).json(ret);
 });
 
+
 //add Flight
 app.post('/api/addFlight', async (req, res, next) =>{
     let error = '';
@@ -195,7 +198,7 @@ app.post('/api/updateBudget', async (req, res, next) => {
         const newBudget = (currentBudget + amountNumber).toString();
         console.log("New Budget:", newBudget);
 
-        // Update the budget in the database
+
         const result = await db.collection('Trips').updateOne(
             { _id: new ObjectId(tripId) },
             { $set: { Budget: newBudget } }
@@ -204,8 +207,8 @@ app.post('/api/updateBudget', async (req, res, next) => {
         console.log("Modified Count:", result.modifiedCount);
         if (result.modifiedCount === 0) {
             return res.status(404).send({ success: false, error: 'Budget not updated' });
-        }
 
+        }
         res.status(200).send({ success: true, newBudget });
     } catch (error) {
         console.log(error);
@@ -238,8 +241,13 @@ app.post('/api/addFlight', async (req, res, next) =>{
 //add hotel
 app.post('/api/addHotel', async (req, res, next) =>{
     let error = '';
+<<<<<<< HEAD
     const {tripId, hotel, checkIn, checkOut, location, price} = req.body;
     
+=======
+    const {tripId, airline, departureDate, departureTime, arrivalDate, arrivalTime, departureLocation, arrivalLocation, price} = req.body;
+
+>>>>>>> d6a334a06102d7fe374fe27321bba4ace95be3e0
     const priceNumber = price !== undefined ? parseFloat(price) : 0.0;
     if (isNaN(priceNumber)) {
         return res.status(400).json({ error: 'Budget must be a valid number' });
@@ -257,4 +265,29 @@ app.post('/api/addHotel', async (req, res, next) =>{
     res.status(200).json(ret);
 });
 
-app.listen(5000);
+// delete trip
+app.delete('/api/deleteTrip', async (req, res, next) => {
+    const { tripId } = req.body;
+
+    try {
+        const db = client.db();
+
+        // Ensure tripId is valid and convert it to ObjectId
+        if (!ObjectId.isValid(tripId)) {
+            return res.status(400).json({ error: 'Invalid tripId format' });
+        }
+
+        const result = await db.collection('Trips').deleteOne({ _id: new ObjectId(tripId) });
+
+        if (result.deletedCount === 0) {
+            return res.status(404).json({ error: 'Trip not found or already deleted' });
+        }
+
+        res.status(200).json({ message: 'Trip deleted successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'An error occurred while deleting the trip' });
+    }
+});
+
+app.listen(process.env.LOCALHOST_PORT);

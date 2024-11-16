@@ -1,5 +1,6 @@
 #root {
   width: 100vw;
+  height: 100vh;
   margin: 0;
   /* padding: 2rem; */
   text-align: center;
@@ -102,12 +103,22 @@ img{
   width: 100vw;
 }
 
-#accountCreationForm{
+#accountCreationForm, #AccountCreationPage{
   display:flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap:8px;
+}
+#AccountCreationPage{
+  margin:0;
+  overflow: hidden;
+  background-repeat: no-repeat;
+  background-size:cover;
+  height:100%;
+ 
+
+  
 }
 
 .textField{
@@ -116,4 +127,11 @@ img{
   border-width: 2px;
   padding:10px;
   font-size: 24px;
+}
+
+#formbox{
+  padding:36px;
+  background-color: whitesmoke;
+  border-radius: 12px;
+  max-width: 40vw;
 }
