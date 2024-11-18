@@ -11,7 +11,7 @@ let tripId = "0";
 //mongodb stuff
 const MongoClient = require('mongodb').MongoClient;
                                     //password                                    //database name
-const url = process.env.MONGODB_URI;
+const url = "mongodb+srv://User:123456789abc@cluster0.azzld.mongodb.net/Team8DB?retryWrites=true&w=majority&appName=Cluster0"
 const client = new MongoClient(url);
 client.connect();
 const app = express();
@@ -241,13 +241,8 @@ app.post('/api/addFlight', async (req, res, next) =>{
 //add hotel
 app.post('/api/addHotel', async (req, res, next) =>{
     let error = '';
-<<<<<<< HEAD
-    const {tripId, hotel, checkIn, checkOut, location, price} = req.body;
-    
-=======
     const {tripId, airline, departureDate, departureTime, arrivalDate, arrivalTime, departureLocation, arrivalLocation, price} = req.body;
 
->>>>>>> d6a334a06102d7fe374fe27321bba4ace95be3e0
     const priceNumber = price !== undefined ? parseFloat(price) : 0.0;
     if (isNaN(priceNumber)) {
         return res.status(400).json({ error: 'Budget must be a valid number' });

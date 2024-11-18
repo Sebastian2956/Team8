@@ -1,0 +1,141 @@
+/* General Styling */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+  }
+  
+  /* Header */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: white;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .header h1 {
+    font-size: 24px;
+  }
+  
+  .header nav {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .header nav button {
+    background-color: #e9ecef;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+  }
+  
+  .signout {
+    text-decoration: none;
+    color: #007bff;
+  }
+  
+  /* Main Layout */
+  .main {
+    display: flex;
+    padding: 20px;
+    gap: 20px;
+  }
+  
+  /* Left Panel - Upcoming Trips */
+  .upcoming-trips {
+    flex: 3;
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .trips-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+  
+  .trips-header h2 {
+    margin: 0;
+  }
+  
+  .add-trip-button {
+    background: none;
+    border: none;
+    color: #007bff;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .trips-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .trip-card {
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 16px;
+    color: black;
+    font-weight: bold;
+  }
+  
+  /* Right Panel */
+  .right-panel {
+    flex: 1;
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Activities Section */
+  .activities {
+    display: flex;
+    gap: 20px;
+    margin: 20px;
+  }
+  
+  .trip-ideas {
+    flex: 2;
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+  }
+  
+  .idea-cards {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  
+  .card {
+    width: 50px;
+    height: 50px;
+    background-color: #007bff;
+    border-radius: 10px;
+  }
+  
+  .other {
+    flex: 1;
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+  }
+  
+  /* Bottom Section */
+  .need-ideas {
+    margin: 20px;
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+  }
+  
