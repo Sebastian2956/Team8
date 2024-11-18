@@ -66,10 +66,35 @@ body {
   }
   
   .add-trip-button {
-    background: none;
-    border: none;
-    color: #007bff;
+    margin-top: 10px;
+    padding: 10px 20px;
     font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .add-trip-form {
+    margin-top: 15px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+  
+  .add-trip-form input,
+  .add-trip-form textarea {
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .add-trip-form button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    font-size: 14px;
     cursor: pointer;
   }
   
