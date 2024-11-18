@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
+import { LOCALHOST_PORT } from '../config';
 
 function TripUI() {
-    let _ud: any = localStorage.getItem('user_data');
-    let ud = JSON.parse(_ud);
-    let userId: string = ud.id;
-    let firstName: string = ud.firstName;
-    let lastName: string = ud.lastName;
+    const _ud: any = localStorage.getItem('user_data');
+    const ud = JSON.parse(_ud);
+    const userId: string = ud.id;
+    const firstName: string = ud.firstName;
+    const lastName: string = ud.lastName;
 
     const [message, setMessage] = useState('');
     const [searchResults, setResults] = useState<string[]>([]);
@@ -20,14 +21,14 @@ function TripUI() {
 
     async function addTrip(event: any): Promise<void> {
         event.preventDefault();
-        let obj = { userId, tripName: trip, startDate: start, endDate: end, location, description, budget };
-        let js = JSON.stringify(obj);
+        const obj = { userId, tripName: trip, startDate: start, endDate: end, location, description, budget };
+        const js = JSON.stringify(obj);
         try {
-            const response = await fetch('http://localhost:5000/api/addTrip', {
+            const response = await fetch( LOCALHOST_PORT + '/api/addTrip', {
                 method: 'POST', body: js, headers: { 'Content-Type': 'application/json' }
             });
-            let txt = await response.text();
-            let res = JSON.parse(txt);
+            const txt = await response.text();
+            const res = JSON.parse(txt);
             if (res.error.length > 0) {
                 setMessage('API Error: ' + res.error);
             } else {
@@ -40,16 +41,16 @@ function TripUI() {
 
     async function searchTrip(event: any): Promise<void> {
         event.preventDefault();
-        let obj = { userId, search };
-        let js = JSON.stringify(obj);
+        const obj = { userId, search };
+        const js = JSON.stringify(obj);
 
         try {
-            const response = await fetch('http://localhost:5000/api/searchTrips', {
+            const response = await fetch( LOCALHOST_PORT + '/api/searchTrips', {
                 method: 'POST', body: js, headers: { 'Content-Type': 'application/json' }
             });
-            let txt = await response.text();
-            let res = JSON.parse(txt);
-            let _results = res.results;
+            const txt = await response.text();
+            const res = JSON.parse(txt);
+            const _results = res.results;
 
             // Generate buttons for each search result
             const resultButtons = _results.map((trip: any, index: number) => (

@@ -1,10 +1,11 @@
+import { LOCALHOST_PORT } from '../config';
 import React, {useState} from 'react';
 import updateBudget from './Budget';
 
 function FlightDetails(){
-    let _td: any = localStorage.getItem('trip_data');
-    let td = JSON.parse(_td);
-    let tripId: string = td.TripId;
+    const _td: any = localStorage.getItem('trip_data');
+    const td = JSON.parse(_td);
+    const tripId: string = td.TripId;
 
     const [message, setMessage] = useState('');
     const [airline, setAirline] = useState('');
@@ -23,14 +24,14 @@ function FlightDetails(){
         //input: airline, departureDate, departureTime, arrivalDate, arrivalTime, departureLocation, arrivalLocation, price
         //output: confirmation
         //create object then turn it into json string
-        let obj = {tripId, airline, departureDate, departureTime, arrivalDate, arrivalTime, departureLocation, arrivalLocation, price};
-        let js = JSON.stringify(obj);
+        const obj = {tripId, airline, departureDate, departureTime, arrivalDate, arrivalTime, departureLocation, arrivalLocation, price};
+        const js = JSON.stringify(obj);
         try{
-            const response = await fetch('http://localhost:5000/api/addFlight', {
+            const response = await fetch( LOCALHOST_PORT + '/api/addFlight', {
                 method: 'POST', body: js, headers: {'Content-Type': 'application/json'}
             });
-            let txt = await response.text();
-            let res = JSON.parse(txt);
+            const txt = await response.text();
+            const res = JSON.parse(txt);
             if (res.error.length > 0) {
                 setMessage('API Error: ' + res.error);
             } else {
@@ -62,8 +63,8 @@ function FlightDetails(){
                 onChange={(e) => setArrivalLocation(e.target.value)} />
             <input type="text" id="price" placeholder="Price"
                 onChange={(e) => {
-                    let _reduce = 0 - parseInt(e.target.value);
-                    let reduce = _reduce.toString();
+                    const _reduce = 0 - parseInt(e.target.value);
+                    const reduce = _reduce.toString();
                     setPrice(reduce)}} />
             <button type="button" id="addFlightButton" className="buttons"
                 onClick={addFlight}> Add Flight</button><br />
