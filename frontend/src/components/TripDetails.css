@@ -1,0 +1,157 @@
+/* TripDetails.css */
+/*body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+}*/
+
+body {
+   /* background-image: url('../assets/photos/travelbg.jpg'); /* Path to your JPG file */
+   /* background-size: cover; /* Ensures the image covers the entire background */
+   /* background-position: center; /* Centers the background image */
+   /* background-repeat: no-repeat; /* Prevents the image from tiling */
+
+   background-color: #333;
+    color: #333;
+    font-family: Arial, sans-serif;
+    margin: 0;
+}
+
+.dashboard {
+    /*display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;*/
+    flex: 1;
+    display: flex;
+    /*flex-direction: column;
+    align-items: center;*/
+    height: 100vh;
+    /*padding: 20px;*/
+    font-family: Arial, sans-serif;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: #f0a354;
+    padding: 20px;
+    color: #fff;
+}
+
+.sidebar h2 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    color: #333;
+    font-weight: bold;
+}
+
+.trip-list {
+    list-style-type: none;
+    padding: 0;
+    width: 100%
+}
+
+.trip-item {
+    /*padding: 10px;*/
+    border-radius: 4px;
+    margin-bottom: 10px;
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+.trip-item:hover {
+    text-decoration: underline;
+    cursor: pointer;
+    color: #ffe6cc;
+}
+
+.content {
+    flex: 1;
+    background-color: #ffffff;
+    padding: 20px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.dashboard-header {
+    text-align: center;
+    padding: 20px;
+    /*justify-content: center;
+    width: 100%;
+    margin-bottom: 20px;
+    background-color: #e0e0e0;*/
+}
+
+.title {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+}
+
+.header {
+    background-color: #e0e0e0;
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.header h1 {
+    font-style: italic;
+    font-size: 2em;
+    color: #333;
+}
+
+/*.dashboard-content {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.trip-card {
+    background-color: #ffffff;
+    background: blur;
+    border-radius: 8px;
+    padding: 20px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}*/
+
+.trip-info {
+    padding: 20px;
+}
+
+.trip-title {
+    font-size: 2.5em;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.trip-detail {
+    margin: 10px 0;
+    font-size: 1.2em;
+    color: #555;
+}
+
+.back-button {
+    display: block;
+    width: 100%;
+    margin-top: 20px;
+    padding: 10px;
+    font-size: 1em;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.back-button:hover {
+    background-color: #0056b3;
+} 
