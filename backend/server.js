@@ -241,13 +241,8 @@ app.post('/api/addFlight', async (req, res, next) =>{
 //add hotel
 app.post('/api/addHotel', async (req, res, next) =>{
     let error = '';
-<<<<<<< HEAD
     const {tripId, hotel, checkIn, checkOut, location, price} = req.body;
     
-=======
-    const {tripId, airline, departureDate, departureTime, arrivalDate, arrivalTime, departureLocation, arrivalLocation, price} = req.body;
-
->>>>>>> d6a334a06102d7fe374fe27321bba4ace95be3e0
     const priceNumber = price !== undefined ? parseFloat(price) : 0.0;
     if (isNaN(priceNumber)) {
         return res.status(400).json({ error: 'Budget must be a valid number' });
@@ -290,4 +285,4 @@ app.delete('/api/deleteTrip', async (req, res, next) => {
     }
 });
 
-app.listen(process.env.LOCALHOST_PORT);
+app.listen(process.env.PORT);
