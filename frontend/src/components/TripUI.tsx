@@ -186,7 +186,7 @@ function TripUI() {
                 <button type="button" id="searchTripButton" className="buttons"
                     onClick={searchTrip}> Search Trip </button><br />
                 <span id="tripSearchResult">{searchResults}</span>
-                <div id="tripList">{tripList}</div>
+                {/* <div id="tripList">{tripList}</div> */}
                 <br /><br />
 
                 <button className="add-trip-button" onClick={() => setShowAddTripForm(!showAddTripForm)}>+ Add new Trip</button>
@@ -218,7 +218,7 @@ function TripUI() {
                 )}
               </div>
               <div className="trips-list">
-                {trips.map((trip, index) => (
+                {/* {trips.map((trip, index) => (
                   <div
                     key={index}
                     className="trip-card"
@@ -226,7 +226,8 @@ function TripUI() {
                   >
                     {trip.name} - {trip.date}
                   </div>
-                ))}
+                ))} */}
+                {tripList}
               </div>
             </section>
     
