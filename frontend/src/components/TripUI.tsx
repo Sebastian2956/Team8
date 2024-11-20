@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { LOCALHOST_PORT } from '../config';
 import './tripUI.css';
 
@@ -63,7 +63,7 @@ function TripUI() {
             // Generate buttons for each search result
             const resultButtons = _results.map((trip: any, index: number) => (
                 <button key={trip._id || index} onClick={() => handleTripClick(trip)}>
-                    {trip.TripName}
+                    {trip.Location} - {trip.StartDate}
                 </button>
             ));
 
@@ -104,7 +104,32 @@ function TripUI() {
     function handleBudgetTextChange(e: any): void {
         setBudgetValue(e.target.value);
     }
+    useEffect(() =>{
+        //event.preventDefault();
+        const fetchData = async() =>{
+            const obj = { userId, search };
+            const js = JSON.stringify(obj);
+            try{
+                const response = await fetch( LOCALHOST_PORT + '/api/searchTrips', {
+                    method: 'POST', body: js, headers: { 'Content-Type': 'application/json' }
+                });
+                const txt = await response.text();
+                const res = JSON.parse(txt);
+                const _results = res.results;
 
+                // Generate buttons for each search result
+                const resultButtons = _results.map((trip: any, index: number) => (
+                    <button key={trip._id || index} onClick={() => handleTripClick(trip)}>
+                        {trip.Location} - {trip.StartDate}
+                    </button>
+                ));
+                setTripList(resultButtons);
+            }catch(error: any) {
+                setMessage(error.toString());
+            }
+        }
+        fetchData();
+    }, []);
     /*return (
         <div id="tripUIDiv">
             <br />
