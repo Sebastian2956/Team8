@@ -19,6 +19,14 @@ function TripDetails(){
         window.location.href = '/trips';
 
     };
+    // this is to edit description
+    // async function editDescription(event: any): Promise<void>{
+    //     event.preventDefault();
+    //     const obj = {tripId, tripDescription};
+    // }
+
+
+
 
     return(
         <div id="budgetCounter">
