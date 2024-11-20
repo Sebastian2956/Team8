@@ -11,7 +11,7 @@ let tripId = "0";
 //mongodb stuff
 const MongoClient = require('mongodb').MongoClient;
                                     //password                                    //database name
-const url = process.env.MONGO_URI;
+const url = process.env.MONGODB_URI;
 const client = new MongoClient(url);
 client.connect();
 const app = express();
@@ -72,50 +72,21 @@ app.post('/api/login', async (req, res, next) =>{
 });
 
 //register user
-app.post('/api/registerUser', async (req, res, next) => {
-    // Incoming: firstName, lastName, userName, password, email
-    const { firstName, lastName, userName, password, email } = req.body;
+app.post('/api/registerUser', async (req, res, next) =>{
+    //incoming: userId, firstName, lastName, userName, password
+    //outgoing: error
+    var error = '';
+    const {firstName, lastName, userName, password} = req.body;
+    const newUser = {FirstName:firstName, LastName:lastName, Login:userName, Password:password};
 
-    // Validate input: Ensure all fields are provided
-    if (!firstName || !lastName || !userName || !password || !email) {
-        return res.status(400).json({ error: 'All fields, including email, are required' });
-    }
-
-    // Additional validation: Check for valid email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-        return res.status(400).json({ error: 'Invalid email format' });
-    }
-
-    const newUser = {
-        FirstName: firstName,
-        LastName: lastName,
-        Login: userName,
-        Password: password,
-        Email: email
-    };
-
-    try {
+    try{
         const db = client.db();
-
-        // Check for duplicate username
-        const existingUser = await db.collection('Users').findOne({ Login: userName });
-        if (existingUser) {
-            return res.status(400).json({ error: 'Username already exists' });
-        }
-
-        // Check for duplicate email
-        const existingEmail = await db.collection('Users').findOne({ Email: email });
-        if (existingEmail) {
-            return res.status(400).json({ error: 'Email already exists' });
-        }
-
-        // Insert the new user
         const result = await db.collection('Users').insertOne(newUser);
-        res.status(200).json({ success: true, user: newUser });
-    } catch (e) {
-        res.status(500).json({ error: e.toString() });
+    }catch(e){
+        error = e.toString();
     }
+    var ret = {newUser, error:error};
+    res.status(200).json(ret);
 });
 
 //add trip
@@ -245,17 +216,39 @@ app.post('/api/updateBudget', async (req, res, next) => {
     }
 });
 
-//add hotel
-app.post('/api/addHotel', async (req, res, next) =>{
+//add trip
+app.post('/api/addFlight', async (req, res, next) =>{
     let error = '';
-    const {tripId, hotel, checkIn, checkOut, location, price} = req.body;
-    
+    const {tripId, airline, departureDate, departureTime, arrivalDate, arrivalTime, departureLocation, arrivalLocation, price} = req.body;
+
     const priceNumber = price !== undefined ? parseFloat(price) : 0.0;
     if (isNaN(priceNumber)) {
         return res.status(400).json({ error: 'Budget must be a valid number' });
     }
 
-    const newHotel = {TripId:tripId, Hotel:hotel, CheckIn:checkIn, CheckOut:checkOut, Location:location, Price:priceNumber};
+    const newFlight = {TripId:tripId, Airline:airline, DepartureDate:departureDate, DepartureTime:departureTime, ArrivalDate:arrivalDate, ArrivalTime:arrivalTime, DepartureLocation:departureLocation, ArrivalLocation:arrivalLocation, Price:priceNumber};
+
+    try{
+        const db = client.db();
+        const result = await db.collection('Flights').insertOne(newFlight);
+    }catch(e){
+        error  = e.toString();
+    }
+    var ret = {newFlight, error: error}
+    res.status(200).json(ret);
+});
+
+//add hotel
+app.post('/api/addHotel', async (req, res, next) =>{
+    let error = '';
+    const {tripId, airline, departureDate, departureTime, arrivalDate, arrivalTime, departureLocation, arrivalLocation, price} = req.body;
+
+    const priceNumber = price !== undefined ? parseFloat(price) : 0.0;
+    if (isNaN(priceNumber)) {
+        return res.status(400).json({ error: 'Budget must be a valid number' });
+    }
+
+    const newHotel = {TripId:tripId, Airline:airline, DepartureDate:departureDate, DepartureTime:departureTime, ArrivalDate:arrivalDate, ArrivalTime:arrivalTime, DepartureLocation:departureLocation, ArrivalLocation:arrivalLocation, Price:priceNumber};
 
     try{
         const db = client.db();
@@ -291,5 +284,26 @@ app.delete('/api/deleteTrip', async (req, res, next) => {
         res.status(500).json({ error: 'An error occurred while deleting the trip' });
     }
 });
+app.delete('/api/deleteHotel', async (req, res, next) => {
+    const { hotelId } = req.body;
 
-app.listen(process.env.LOCALHOST_PORT || 3000);
+    try {
+        const db = client.db();
+
+        if (!ObjectId.isValid(hotelId)) {
+            return res.status(400).json({ error: 'Invalid hotelId format' });
+        }
+
+        const result = await db.collection('Hotels').deleteOne({ _id: new ObjectId(hotelId) });
+
+        if (result.deletedCount === 0) {
+            return res.status(404).json({ error: 'Hotel not found or already deleted' });
+        }
+
+        res.status(200).json({ message: 'Hotel deleted successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'An error occurred while deleting the hotel' });
+    }
+});
+app.listen(process.env.REACT_APP_LOCALHOST_PORT);
