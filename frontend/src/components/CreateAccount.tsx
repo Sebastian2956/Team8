@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { LOCALHOST_PORT } from '../config';
 
 function CreateAccount() {
     // State variables to store form inputs
@@ -29,7 +30,7 @@ function CreateAccount() {
 
         try {
             // Make the API call
-            const response = await fetch('http://localhost:4000/api/registerUser', {
+            const response = await fetch( LOCALHOST_PORT + '/api/registerUser', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newUser),
