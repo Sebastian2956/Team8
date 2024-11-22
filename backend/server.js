@@ -111,7 +111,29 @@ app.post('/api/registerUser', async (req, res, next) => {
         }
 
         // Insert the new user
-        const result = await db.collection('Users').insertOne(newUser);
+        const result = await db.collection('Users').insertOne(newUser);app.delete('/api/deleteHotel', async (req, res, next) => {
+    const { hotelId } = req.body;
+
+    try {
+        const db = client.db();
+
+
+        if (!ObjectId.isValid(hotelId)) {
+            return res.status(400).json({ error: 'Invalid hotelId format' });
+        }
+
+        const result = await db.collection('Hotels').deleteOne({ _id: new ObjectId(hotelId) });
+
+        if (result.deletedCount === 0) {
+            return res.status(404).json({ error: 'Hotel not found or already deleted' });
+        }
+
+        res.status(200).json({ message: 'Hotel deleted successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'An error occurred while deleting the hotel' });
+    }
+});
         res.status(200).json({ success: true, user: newUser });
     } catch (e) {
         res.status(500).json({ error: e.toString() });
@@ -249,7 +271,7 @@ app.post('/api/updateBudget', async (req, res, next) => {
 app.post('/api/addHotel', async (req, res, next) =>{
     let error = '';
     const {tripId, hotel, checkIn, checkOut, location, price} = req.body;
-    
+
     const priceNumber = price !== undefined ? parseFloat(price) : 0.0;
     if (isNaN(priceNumber)) {
         return res.status(400).json({ error: 'Budget must be a valid number' });
@@ -275,7 +297,29 @@ app.delete('/api/deleteTrip', async (req, res, next) => {
         const db = client.db();
 
         // Ensure tripId is valid and convert it to ObjectId
-        if (!ObjectId.isValid(tripId)) {
+        if (!ObjectId.isValid(tripId)) {app.delete('/api/deleteHotel', async (req, res, next) => {
+    const { hotelId } = req.body;
+
+    try {
+        const db = client.db();
+
+
+        if (!ObjectId.isValid(hotelId)) {
+            return res.status(400).json({ error: 'Invalid hotelId format' });
+        }
+
+        const result = await db.collection('Hotels').deleteOne({ _id: new ObjectId(hotelId) });
+
+        if (result.deletedCount === 0) {
+            return res.status(404).json({ error: 'Hotel not found or already deleted' });
+        }
+
+        res.status(200).json({ message: 'Hotel deleted successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'An error occurred while deleting the hotel' });
+    }
+});
             return res.status(400).json({ error: 'Invalid tripId format' });
         }
 
@@ -289,6 +333,31 @@ app.delete('/api/deleteTrip', async (req, res, next) => {
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'An error occurred while deleting the trip' });
+    }
+});
+
+//deletes hotels obvi
+app.delete('/api/deleteHotel', async (req, res, next) => {
+    const { hotelId } = req.body;
+
+    try {
+        const db = client.db();
+
+
+        if (!ObjectId.isValid(hotelId)) {
+            return res.status(400).json({ error: 'Invalid hotelId format' });
+        }
+
+        const result = await db.collection('Hotels').deleteOne({ _id: new ObjectId(hotelId) });
+
+        if (result.deletedCount === 0) {
+            return res.status(404).json({ error: 'Hotel not found or already deleted' });
+        }
+
+        res.status(200).json({ message: 'Hotel deleted successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'An error occurred while deleting the hotel' });
     }
 });
 
