@@ -11,10 +11,16 @@ function TripDetails(){
     let tripLocation: string = td.Location;
     let tripDescription: string = td.Description;
     const [tripBudget, setTripBudget] = useState(td.Budget);
-    
+    const [itinerary, setItinerary] = useState<string[]>([]);
     
     console.log(tripStartDate);
 
+    const addItineraryItem = () => {
+        const newItem = prompt('Enter a new itinerary item:');
+        if (newItem) {
+            setItinerary([...itinerary, newItem])
+        }
+    };
 
     function goBack(){
         localStorage.removeItem("trip_data");
@@ -55,8 +61,18 @@ function TripDetails(){
                 </div>
             
                 <div className="trip_right">
-                    <h3>Your Itinerary</h3>
+                    <div className="itinerary_header">
+                        <h3>Your Itinerary</h3>
+                        <button onClick={addItineraryItem} className="add_button">+</button>
+                    </div>
+                    
                     <div className="itinerary">
+                        {itinerary.map((item, index) => (
+                            <div key={index} className="itinerary_item">
+                                {item}
+                            </div>
+                        ))}
+
                     </div>
                 </div>
             </div>

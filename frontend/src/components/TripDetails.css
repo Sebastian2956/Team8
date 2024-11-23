@@ -103,6 +103,35 @@ h3 {
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
 }
 
+.itinerary_header {
+    display: flex;
+    align-items: left;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.itinerary_item {
+    padding: 10px;
+    background: #f5f5f5;
+    border-radius: 6px;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.add_button {
+    background: none;
+    color: #007bff;
+    font-size: 24px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    /*margin-top: 10px;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.2);*/
+}
+
+.add_button:hover {
+    background: #0056b3;
+}
+
 /*.itinerary h3 {
     font-size: 20px;
     margin-bottom: 10px;
