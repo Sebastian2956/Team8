@@ -55,13 +55,11 @@ function Login(){
         <div id="loginDiv">
             {/* <span id="inner-title">Log In</span><br/> */}
             <div id="loginForm">
-                Login:
-                <input type="text" id="loginName" placeholder="Username" onChange={handleSetLoginName}/>
-                Password:
+                <input type="text" id="loginName" placeholder="Username" className="textField" onChange={handleSetLoginName}/>
                 <input type="password" id="loginPassword" placeholder="Password" onChange={handleSetPassword}/>
 
 
-                <input type="submit" id="loginButton" className="buttons" value="Login"
+                <input type="submit" id="loginButton" className="bigButton" value="Login"
                     onClick={doLogin}/>
                 <span id="loginResult">{message}</span>
             </div>

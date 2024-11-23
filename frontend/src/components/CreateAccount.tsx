@@ -94,13 +94,13 @@ function CreateAccount() {
                 value={loginPassword}
                 onChange={(e) => setLoginPassword(e.target.value)}
             />
-            <button type="submit" id="createAccountButton" className="buttons">
+            <button type="submit" id="createAccountButton" className="bigButton">
                 Create Account
             </button>
             <button
                 type="button"
                 id="cancelButton"
-                className="buttons"
+                className="mediumButton"
                 onClick={cancelCreation}
             >
                 Cancel
