@@ -12,7 +12,7 @@ function CreateAccountButton() {
         <button
             type="button"
             id="createAccountButton"
-            className="buttons"
+            className="mediumButton"
             onClick={goToCreateAccount}
         >
             Create Account
