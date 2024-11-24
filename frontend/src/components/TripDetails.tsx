@@ -40,7 +40,7 @@ function TripDetails(){
             <div className="layout">
                 <div className="trip_left">
                     <div className="trip_info">
-                        <h2>{tripName}</h2>
+                        <h2>{tripLocation}</h2>
                         <p>
                             {tripStartDate} - {tripEndDate}
                         </p>
@@ -65,7 +65,7 @@ function TripDetails(){
                         <h3>Your Itinerary</h3>
                         <button onClick={addItineraryItem} className="add_button">+</button>
                     </div>
-                    
+
                     <div className="itinerary">
                         {itinerary.map((item, index) => (
                             <div key={index} className="itinerary_item">
