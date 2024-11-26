@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+
 import './TripDetails.css'
 
 function TripDetails(){
@@ -27,6 +28,21 @@ function TripDetails(){
         window.location.href = '/trips';
 
     };
+    function findFlights(){
+        //save cookie before redirect
+
+
+        saveCookie();
+        window.location.href = '/findFlights'
+    }
+
+    function saveCookie(){
+        //hold origin, dest, and start date
+        let minutes = 20;
+        let date = new Date();
+        date.setTime(date.getTime() +(minutes*60*1000));
+        document.cookie = "origin=TPA"+",destination=" + tripLocation +",startDate=2024-12-12" + ";expires=" +date.toUTCString()
+    }
 
     return(
         <div className="trip_details">
@@ -45,7 +61,7 @@ function TripDetails(){
                             {tripStartDate} - {tripEndDate}
                         </p>
                         <h3>Budget: ${tripBudget}</h3>
-
+                        <button onClick ={findFlights}>Find Flights</button>
                         <h3>Flights:</h3>
                         <div className="trip_section">
                             <div className="flights">

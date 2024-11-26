@@ -5,6 +5,8 @@ import LoginPage from './pages/LoginPage.tsx';
 import TripPage from './pages/TripPage.tsx';
 import DetailedTripPage from './pages/DetailedTripPage.tsx';
 import AccountCreationPage from './pages/AccountCreationPage.tsx';
+import FindFlightsPage from './pages/FindFlightsPage.tsx'
+
 
 function App() {
   return (
@@ -14,6 +16,7 @@ function App() {
         <Route path="/trips" element={<TripPage/>}/>
         <Route path="/thisTrip" element={<DetailedTripPage/>}/>
         <Route path="/createAccount" element={<AccountCreationPage/>}/>
+        <Route path="/findFlights" element={<FindFlightsPage/>}/>
       </Routes>
     </Router>
   );
