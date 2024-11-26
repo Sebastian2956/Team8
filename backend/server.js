@@ -29,7 +29,7 @@ const getAccessToken = async () => {
   let isTokenExists = tokenCache.accessToken !== null && tokenCache.expirationTime !== null
   let isTokenValid = Date.now() < tokenCache.expirationTime
 
-const credentials = `grant_type=${encodeURIComponent('client_credentials')}&` +
+  const credentials = `grant_type=${encodeURIComponent('client_credentials')}&` +
                       `client_id=${encodeURIComponent(process.env.AMADEUS_CLIENT_ID)}&` +
                       `client_secret=${encodeURIComponent(process.env.AMADEUS_CLIENT_SECRET)}`;
 
@@ -59,6 +59,27 @@ const credentials = `grant_type=${encodeURIComponent('client_credentials')}&` +
     throw new Error('Failed to authenticate with Amadeus API')
   }
 }
+const getNearestAirport = async (cityname)=>{
+    try{
+        const token = await getAccessToken();
+        const api_url = 'https://test.api.amadeus.com/v1/reference-data/locations/cities'
+
+        const response = await axios.get(api_url, {
+        params: {
+            keyword: cityname,
+            include: "AIRPORTS"
+        },
+        headers: {
+            Authorization: `Bearer ${token}`
+        },
+        })
+        return response.data;
+        
+    }catch (error) {
+        console.error('Error fetching airports: ', (error.response?.data || error.message))
+        throw new Error('Failed to fetch airports')
+      }
+}
 
 const findFlightsFromToWhereOnDate = async (origin, destination, date, adults) => {
   try {
@@ -87,17 +108,29 @@ const findFlightsFromToWhereOnDate = async (origin, destination, date, adults) =
 
 app.get('/api/findFlightsFromToWhereOnDate', async (req, res, next) => {
   const { origin, destination, date } = req.query
-
+    console.log(origin + destination + date);
   if (!origin || !destination || !date) {
     return res.status(400).json({ error: 'Missing required parameter(s)' })
   }
 
-  try {
+  try {     
     const flightData = await findFlightsFromToWhereOnDate(origin, destination, date)
     res.json(flightData)
   } catch (error) {
     res.status(500).json({ error: error.message })
   }
+})
+app.get('/api/getNearestAirport', async(req,res,next) =>{
+    const {cityname} = req.query;
+    if(!cityname){
+        return res.status(400).json({ error: 'Missing required parameter(s)' })
+    }
+    try{
+        const cityData = await getNearestAirport(cityname);
+        res.json(cityData);
+    }catch(error){
+        res.status(500).json({error:error.message});
+    }
 })
 
 //req represents incoming request from client
