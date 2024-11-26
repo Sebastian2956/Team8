@@ -5,16 +5,67 @@ import React, {useState, useEffect} from 'react';
 function FindFlights(){
     const [searchResults, setResults] = useState<string[]>([]);
     //vars needed to find a flight (locations must be the 3 letter code)
+    
+    const [flightList, setFlightList] = useState<JSX.Element[]>([]);
+    
     var origin = "";
-    var iataCityCode = "";
-    var iataAirlineCode = "";
-
+   
     var destination = "";
     var iataDestination = "";
 
     var startDate = "";
     var returnDate = "";
 
+    var allFlights: Flight[] = [];
+
+    class Flight{
+        public origin: string;
+        public arrival: string;
+        public departureTime: string;
+        public price: number;
+
+
+        public constructor(origin:string, arrival:string, departureTime:string, price: number){
+            this.origin = origin;
+            this.arrival = arrival;
+            this.departureTime = departureTime;
+            this.price = price;
+        }
+       
+    }
+    function setFlights(data: any){
+        for(var i = 0; i < 5; i++){
+            var origin = data.data[i].itineraries[0].segments[0].departure.iataCode;
+            console.log("origin: " + origin);
+
+            var arrival = data.data[i].itineraries[0].segments[1].arrival.iataCode;
+            console.log("arrival: " + arrival);
+
+            var departureString = data.data[i].itineraries[0].segments[0].departure.at;
+            let departureTime = departureString.split("T");
+
+            var cost = data.data[i].price.grandTotal;
+
+
+            var newFlight = new Flight(origin, arrival, departureTime[1], cost);
+            allFlights.push(newFlight);
+            console.log(newFlight);
+        }
+
+        const flightDivs = allFlights.map((flight, index: number) =>(
+            <div key ={index}>
+                <ul>
+                    <li>{flight.origin}</li>
+                    <li>{flight.departureTime}</li>
+                    
+                </ul>
+                <h2>{flight.price}</h2>
+            </div>
+        ));
+
+        setFlightList(flightDivs);
+
+    }
     
     
 
@@ -68,7 +119,7 @@ function FindFlights(){
             console.log(res.data[0].iataCode);
             iataDestination = res.data[0].iataCode;
             
-            console.log("Airport: " + iataDestination);
+            //console.log("Airport: " + iataDestination);
 
         }catch(error:any){
             setResults([error.toString])
@@ -112,7 +163,7 @@ function FindFlights(){
                     date: "2024-12-12"
 
                 };
-                console.log(obj);
+                
                 const apiUrl = LOCALHOST_PORT + '/api/findFlightsFromToWhereOnDate/'
                 const searchParams = new URL(apiUrl);
                 searchParams.search = new URLSearchParams(obj).toString();
@@ -127,6 +178,8 @@ function FindFlights(){
                     const res = JSON.parse(txt);
 
                     console.log(res);
+                    //function to store flights into array
+                    setFlights(res);
 
                 }catch(error:any){
                     setResults([error.toString]);
@@ -140,7 +193,11 @@ function FindFlights(){
     
     return(
         <div>
-            <h1>test</h1>
+            <h1>Flights:</h1>
+            <div className="flightDetails">
+                {flightList}
+
+            </div>
         </div>
     )
     //useEffect() to call findFlight on page load
