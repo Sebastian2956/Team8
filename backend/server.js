@@ -74,7 +74,7 @@ const getNearestAirport = async (cityname)=>{
         },
         })
         return response.data;
-        
+
     }catch (error) {
         console.error('Error fetching airports: ', (error.response?.data || error.message))
         throw new Error('Failed to fetch airports')
@@ -113,7 +113,7 @@ app.get('/api/findFlightsFromToWhereOnDate', async (req, res, next) => {
     return res.status(400).json({ error: 'Missing required parameter(s)' })
   }
 
-  try {     
+  try {
     const flightData = await findFlightsFromToWhereOnDate(origin, destination, date)
     res.json(flightData)
   } catch (error) {
@@ -476,5 +476,33 @@ app.delete('/api/deleteHotel', async (req, res, next) => {
     }
 });
 
+app.put('/api/updateTrip', async (req, res) => {
+    const { tripId, updateData } = req.body;
+
+    try {
+        const db = client.db();
+
+        // Validate tripId
+        if (!ObjectId.isValid(tripId)) {
+            return res.status(400).json({ error: 'Invalid tripId format' });
+        }
+
+        // Perform the update
+        const result = await db.collection('Trips').updateOne(
+            { _id: new ObjectId(tripId) }, // Match the trip by ID
+            { $set: updateData }           // Update fields in updateData
+        );
+
+        // Handle cases where no document is updated
+        if (result.matchedCount === 0) {
+            return res.status(404).json({ error: 'Trip not found' });
+        }
+
+        res.status(200).json({ message: 'Trip updated successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'An error occurred while updating the trip' });
+    }
+});
 
 app.listen(process.env.LOCALHOST_PORT || 3000);
