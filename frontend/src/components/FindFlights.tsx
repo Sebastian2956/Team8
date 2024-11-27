@@ -1,5 +1,6 @@
 import { LOCALHOST_PORT } from '../config';
 import React, {useState, useEffect} from 'react';
+import './FindFlights.css';
 
 
 function FindFlights(){
@@ -22,44 +23,65 @@ function FindFlights(){
         public origin: string;
         public arrival: string;
         public departureTime: string;
+        public arrivalTime: string;
         public price: number;
+        public stops: number;
 
 
-        public constructor(origin:string, arrival:string, departureTime:string, price: number){
+        public constructor(origin:string, arrival:string, departureTime:string, arrivalTime:string, price: number, stops: number){
             this.origin = origin;
             this.arrival = arrival;
+            this.arrivalTime = arrivalTime;
             this.departureTime = departureTime;
             this.price = price;
+            this.stops = stops;
         }
        
     }
     function setFlights(data: any){
         for(var i = 0; i < 5; i++){
+            var stops = 0;
+            var segments = data.data[i].itineraries[0].segments.length - 1;
             var origin = data.data[i].itineraries[0].segments[0].departure.iataCode;
             console.log("origin: " + origin);
 
-            var arrival = data.data[i].itineraries[0].segments[1].arrival.iataCode;
+            var arrival = data.data[i].itineraries[0].segments[segments].arrival.iataCode;
             console.log("arrival: " + arrival);
 
             var departureString = data.data[i].itineraries[0].segments[0].departure.at;
             let departureTime = departureString.split("T");
 
+            var arrivalString = data.data[i].itineraries[0].segments[segments].arrival.at;
+            let arrivalTime = arrivalString.split("T");
+
             var cost = data.data[i].price.grandTotal;
 
+            if(segments + 1 > 1){
+                stops +=  1;
+            }
+            
 
-            var newFlight = new Flight(origin, arrival, departureTime[1], cost);
+            var newFlight = new Flight(origin, arrival, departureTime[1],arrivalTime[1], cost, stops);
             allFlights.push(newFlight);
             console.log(newFlight);
         }
 
         const flightDivs = allFlights.map((flight, index: number) =>(
-            <div key ={index}>
-                <ul>
-                    <li>{flight.origin}</li>
-                    <li>{flight.departureTime}</li>
-                    
-                </ul>
-                <h2>{flight.price}</h2>
+            <div key ={index} className="flightCard">
+                <div className="departureArrival">
+                    <ul>
+                        <li className="airportName"> {flight.origin}</li>
+                        <li>{flight.departureTime}</li>
+                    </ul>
+                    {
+                        flight.stops > 0 ? (<h2>{flight.stops} Stops</h2>) : (<h2></h2>)
+                    }
+                    <ul>
+                        <li className="airportName"> {flight.arrival}</li>
+                        <li>{flight.arrivalTime}</li>
+                    </ul>
+                </div>
+                <h2>${flight.price}</h2>
             </div>
         ));
 
@@ -129,29 +151,7 @@ function FindFlights(){
     }
 
 
-    /*
 
-    async function findFlight(event: any): Promise<void>{
-        event.preventDefault();
-
-        //obj to hold all the data needed to query a flight
-        const obj = {origin, destination, startDate};
-        const js = JSON.stringify(obj);
-        try{
-            const response = await fetch(LOCALHOST_PORT + '/api/findFlightsFromToWhereOnDate',{
-                method: 'GET', body: js, headers: { 'Content-Type': 'application/json' }
-            })
-            const txt = await response.text();
-            const res = JSON.parse(txt);
-            const results = res.results;
-
-            console.log(results);
-
-        }catch(error:any){
-            setResults([error.toString])
-        }
-    }
-    */
     useEffect(()=>{
         const fetchData = async() =>{
             readCookie();
