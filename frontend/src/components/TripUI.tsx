@@ -200,8 +200,8 @@ function TripUI() {
             <nav>
               <button>Trips</button>
               <button>Find Flights</button>
-              <button>Option 2</button>
-              <button>Option 3</button>
+              {/*<button>Option 2</button>
+              <button>Option 3</button>*/}
             </nav>
             <button onClick={doLogout} className="signout">
                 &rarr; Sign Out
@@ -215,7 +215,6 @@ function TripUI() {
               <div className="trips-header">
                 <h2>Upcoming Trips</h2>
 
-                <br />
                 <div className="trip_actions">
                     {/* Search Section */}
                     <div className="search_trip">
@@ -225,47 +224,49 @@ function TripUI() {
                         onClick={searchTrip}> Search Trip </button>
                     </div>
 
-                    <br /><br />
-
-                    {/* Add New Trip Section */}
+                    {/* Add New Trip Button */}
                     <button className="add-trip-button" onClick={() => setShowAddTripForm(!showAddTripForm)}>+ Add new Trip</button>
-
-                    {showAddTripForm && (
-                        <div className="add-trip-section">
-                            <h3>Add New Trip</h3>
-                            <form className="add-trip-form" onSubmit={addTrip}>
-                                <input type="text" id="tripName" placeholder="Trip Name"
-                                onChange={handleTripTextChange} />
-                                <input type="text" id="startDate" placeholder="Start Date"
-                                onChange={handleStartTextChange} />
-                                <input type="text" id="endDate" placeholder="End Date"
-                                onChange={handleEndTextChange} />
-                                <input type="text" id="location" placeholder="Location"
-                                onChange={handleLocationTextChange} />
-                                <input type="text" id="description" placeholder="Description"
-                                onChange={handleDescriptionTextChange} />
-                                <input type="text" id="budget" placeholder="Budget $$$"
-                                onChange={handleBudgetTextChange} />
-
-                                <div className="add-trip-buttons">
-                                    <button type="submit" className="add-btn">Add Trip</button>
-                                    <button 
-                                        type="button" 
-                                        className="cancel-btn" 
-                                        onClick={() => setShowAddTripForm(false)}>
-                                        Cancel
-                                    </button>
-                                </div>
-                                {/*<button type="submit">Add Trip</button>*/}
-                            </form>
-        
-                            {/* Feedback Message */}
-                            <span id="TripAddResult">{message}</span>
-                        </div>
-                    )}
                 </div>
                 {/* <div id="tripList">{tripList}</div> */}
               </div>
+
+                {/* Add New Trip Container*/}
+                <div className="add-trip-container">
+                    {showAddTripForm && (
+                            <div className="add-trip-section">
+                                <h3>Add New Trip</h3>
+                                <form className="add-trip-form" onSubmit={addTrip}>
+                                    <input type="text" id="tripName" placeholder="Trip Name"
+                                    onChange={handleTripTextChange} />
+                                    <input type="text" id="startDate" placeholder="Start Date"
+                                    onChange={handleStartTextChange} />
+                                    <input type="text" id="endDate" placeholder="End Date"
+                                    onChange={handleEndTextChange} />
+                                    <input type="text" id="location" placeholder="Location"
+                                    onChange={handleLocationTextChange} />
+                                    <input type="text" id="description" placeholder="Description"
+                                    onChange={handleDescriptionTextChange} />
+                                    <input type="text" id="budget" placeholder="Budget $$$"
+                                    onChange={handleBudgetTextChange} />
+
+                                    <div className="add-trip-buttons">
+                                        <button type="submit" className="add-btn">Add Trip</button>
+                                        <button 
+                                            type="button" 
+                                            className="cancel-btn" 
+                                            onClick={() => setShowAddTripForm(false)}>
+                                            Cancel
+                                        </button>
+                                    </div>
+                                    {/*<button type="submit">Add Trip</button>*/}
+                                </form>
+            
+                                {/* Feedback Message */}
+                                <span id="TripAddResult">{message}</span>
+                            </div>
+                        )}
+                </div>
+
                 <div className="trips-list">
                 {/* {trips.map((trip, index) => (
                   <div

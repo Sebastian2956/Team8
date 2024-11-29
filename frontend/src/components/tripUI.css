@@ -78,25 +78,47 @@ body {
   .trip_actions {
     display: flex;
     align-items: center;
-    /* margin-bottom: 20px; */
-    gap: 20px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    gap: 50px;
   }
 
   .search_trip {
     display: flex;
-    gap: 10px;
+    gap: 5px;
     align-items: center;
+    /*margin-right: auto;
     padding-top: 15px;
-    margin-bottom: 10px;
+    margin-bottom: 10px;*/
+  }
+
+  .search_trip label {
+    font-size: 20px;
+  }
+
+  .search_trip input {
+    width: 250px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-right: 10px;
+  }
+
+  .add-trip-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
   }
 
   .add-trip-section {
     margin-top: 20px;
+    margin-bottom: 10px;
     padding: 20px;
     background-color: white;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    max-width: 800px;
+    width: 90%;
     margin-left: auto;
     margin-right: auto;
     align-items: center;
@@ -110,12 +132,23 @@ body {
     font-weight: bold;
   }
   
-  /*.add-trip-button {
-    margin-top: 10px;
-    padding: 10px 20px;
-    font-size: 16px;
+  .add-trip-button {
+    font-size: 20px;
+    background: none;
+    border: none;
+    color: #007bff;
     cursor: pointer;
-  }*/
+    text-align: center;
+    margin: 10px 0;
+    display: inline-block;
+    padding: 10px 15px;
+    vertical-align: middle;
+    position: relative;
+  }
+
+  .add-trip-button:hover {
+    text-decoration: underline;
+  }
   
   .add-trip-form { 
     display: grid;
@@ -142,10 +175,10 @@ body {
     min-height: 80px;
   }
 
-  /*.add-trip-button {
-    align-items: right;
-    padding: 20px;
-  }*/
+  /* .add-trip-button {
+    padding-top: 20px;
+    margin-bottom: 10px;
+  } */
   
   .add-trip-buttons {
    /* margin-top: 10px;
