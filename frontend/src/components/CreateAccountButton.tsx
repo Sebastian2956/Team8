@@ -9,13 +9,8 @@ function CreateAccountButton() {
     }
 
     return (
-        <button
-            type="button"
-            id="createAccountButton"
-            className="mediumButton"
-            onClick={goToCreateAccount}
-        >
-            Create Account
+        <button type="button" id="createAccountButton" className="button" onClick={goToCreateAccount}>
+            Create an account
         </button>
     );
 }

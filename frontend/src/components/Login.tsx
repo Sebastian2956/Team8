@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import { LOCALHOST_PORT } from '../config';
+import CreateAccountButton from "../components/CreateAccountButton.tsx";
 
 
 function Login(){
@@ -56,11 +57,12 @@ function Login(){
             {/* <span id="inner-title">Log In</span><br/> */}
             <div id="loginForm">
                 <input type="text" id="loginName" placeholder="Username" className="textField" onChange={handleSetLoginName}/>
-                <input type="password" id="loginPassword" placeholder="Password" onChange={handleSetPassword}/>
+                <input type="password" id="loginPassword" placeholder="Password" className="textField" onChange={handleSetPassword}/>
 
 
-                <input type="submit" id="loginButton" className="bigButton" value="Login"
-                    onClick={doLogin}/>
+                <button type="submit" id="loginButton" className="button" onClick={doLogin}>Login</button>
+                <p id="orText">-Or-</p>
+                <CreateAccountButton/>
                 <span id="loginResult">{message}</span>
             </div>
 
