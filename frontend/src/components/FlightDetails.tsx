@@ -1,6 +1,7 @@
 import { LOCALHOST_PORT } from '../config';
 import React, {useState} from 'react';
 import updateBudget from './Budget';
+import './FlightDetails.css';
 
 function FlightDetails(){
     const _td: any = localStorage.getItem('trip_data');
@@ -44,31 +45,31 @@ function FlightDetails(){
     };
 
     return(
-        <div id="flightDetails">
-            <span id="inner-title">Flights</span><br/>
+        <div>
+            <div id="addFlightBody">
+                <input type="text" id="airline" placeholder="Airline"
+                    onChange={(e) => setAirline(e.target.value)} />
+                <input type="text" id="departureDate" placeholder="Departure Date"
+                    onChange={(e) => setDepartureDate(e.target.value)} />
+                <input type="text" id="departureTime" placeholder="Departure Time"
+                    onChange={(e) => setDepartureTime(e.target.value)} />
+                <input type="text" id="arrivalDate" placeholder="Arrival Date"
+                    onChange={(e) => setArrivalDate(e.target.value)} />
+                <input type="text" id="arrivalTime" placeholder="Arrival Time"
+                    onChange={(e) => setArrivalTime(e.target.value)} />
+                <input type="text" id="departureLocation" placeholder="Departure Location"
+                    onChange={(e) => setDepartureLocation(e.target.value)} />
+                <input type="text" id="arrivalLocation" placeholder="Arrival Location"
+                    onChange={(e) => setArrivalLocation(e.target.value)} />
+                <input type="text" id="price" placeholder="Price"
+                    onChange={(e) => {
+                        const _reduce = 0 - parseInt(e.target.value);
+                        const reduce = _reduce.toString();
+                        setPrice(reduce)}} />
+                <button type="button" id="addFlightButton"
+                    onClick={addFlight}> Add Flight</button><br />
 
-            Add: <input type="text" id="airline" placeholder="Airline"
-                onChange={(e) => setAirline(e.target.value)} />
-            <input type="text" id="departureDate" placeholder="Departure Date"
-                onChange={(e) => setDepartureDate(e.target.value)} />
-            <input type="text" id="departureTime" placeholder="Departure Time"
-                onChange={(e) => setDepartureTime(e.target.value)} />
-            <input type="text" id="arrivalDate" placeholder="Arrival Date"
-                onChange={(e) => setArrivalDate(e.target.value)} />
-            <input type="text" id="arrivalTime" placeholder="Arrival Time"
-                onChange={(e) => setArrivalTime(e.target.value)} />
-            <input type="text" id="departureLocation" placeholder="Departure Location"
-                onChange={(e) => setDepartureLocation(e.target.value)} />
-            <input type="text" id="arrivalLocation" placeholder="Arrival Location"
-                onChange={(e) => setArrivalLocation(e.target.value)} />
-            <input type="text" id="price" placeholder="Price"
-                onChange={(e) => {
-                    const _reduce = 0 - parseInt(e.target.value);
-                    const reduce = _reduce.toString();
-                    setPrice(reduce)}} />
-            <button type="button" id="addFlightButton" className="buttons"
-                onClick={addFlight}> Add Flight</button><br />
-
+            </div>
             <span id="TripAddResult">{message}</span>
         </div>
     );

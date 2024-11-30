@@ -136,3 +136,27 @@ h3 {
     font-size: 20px;
     margin-bottom: 10px;
 }*/
+
+#flightsButtons {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    gap: 10px;
+    height: 3vh;
+    align-content: center;
+}
+
+#flightsButtons button {
+    background-color: #f7ae4f;
+    border-radius: 32px;
+    border:0;
+    font-size:14px;
+    padding: 10px;
+    min-width: 200px;
+    width: 1vw;
+    -webkit-transition: 0.5s;
+}
+  
+#flightsButtons button:hover{
+  background-color: #ff8000;
+}

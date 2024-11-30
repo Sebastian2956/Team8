@@ -1,18 +1,81 @@
-ul{
-    list-style-type: none;
-    text-align: center;
-    padding:0;
-  }
-  .flightCard{
-    padding: 30px;
-    border-radius: 16px;
-    box-shadow: 5px 5px 10px gray;
-    max-width: 30vw;
-  }
-  .departureArrival{
-    display:flex;
-    justify-content: space-between;
-  }
-  .airportName{
-    font-size:36px;
-  }
+#body {
+  background-color: white;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+ul {
+  list-style-type: none;
+  text-align: center;
+  padding: 0;
+}
+
+.flightCard {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  
+  padding: 20px;
+  padding-top: 0px;
+  border-radius: 16px;
+  box-shadow: 5px 5px 10px gray;
+  width: 20vw;
+  height: 10vh;
+  margin: 20px;
+}
+
+.departureArrival {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+
+#dateAndPrice {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+  position: relative;
+  top: -20px;
+}
+
+.airportName {
+  font-size: 36px;
+}
+
+.textField {
+  width: 20vw;
+  min-width: 300px;
+  height: 20px;
+  border-radius: 12px;
+  background-color: #FFFCF9;
+  color: black;
+  padding: 10px;
+  font-size: 14px;
+  border: 2px solid #ccc;
+  -webkit-transition: 0.5s;
+  outline: none;
+}
+
+.textField:focus {
+  border: 2px solid #F18701;
+}
+
+.button {
+  background-color: #f7ae4f;
+  border-radius: 32px;
+  border: 0;
+  font-size: 14px;
+  padding: 10px;
+  min-width: 200px;
+  width: 100%;
+  -webkit-transition: 0.5s;
+}
+
+.button:hover {
+  background-color: #ff8000;
+}

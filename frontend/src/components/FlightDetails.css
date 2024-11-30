@@ -1,0 +1,39 @@
+#addFlightBody {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  max-width: 100%;
+}
+
+#addFlightBody input {
+  flex: 1;
+  max-width: 100%;
+  border-radius: 12px;
+  background-color: #FFFCF9;
+  color: black;
+  padding: 10px;
+  font-size: 14px;
+  border: 2px solid #ccc;
+  -webkit-transition: 0.5s;
+  outline: none;
+}
+
+#addFlightBody input:focus {
+  border: 2px solid #F18701;
+}
+
+#addFlightBody button {
+  flex: 1;
+  max-width: 100%;
+  min-width: 100px;
+  background-color: #f7ae4f;
+  border-radius: 32px;
+  border: 0;
+  font-size: 14px;
+  padding: 10px;
+  -webkit-transition: 0.5s;
+}
+
+#addFlightBody button:hover {
+  background-color: #ff8000;
+}

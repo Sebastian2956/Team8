@@ -1,4 +1,6 @@
 import React, {useState} from 'react';
+import FindFlights from './FindFlights';
+import FlightDetails from './FlightDetails';
 
 import './TripDetails.css'
 
@@ -13,6 +15,9 @@ function TripDetails(){
     let tripDescription: string = td.Description;
     const [tripBudget, setTripBudget] = useState(td.Budget);
     const [itinerary, setItinerary] = useState<string[]>([]);
+
+    const [isFlightsOpen, setIsFlightsOpen] = useState(false);
+    const [isFlightsInfOpen, setIsFlightsInfOpen] = useState(false);
     
     console.log(tripStartDate);
 
@@ -28,10 +33,26 @@ function TripDetails(){
         window.location.href = '/trips';
 
     };
+
+    const toggleSearchFlights = () => {
+        if(isFlightsInfOpen){
+            setIsFlightsInfOpen(!isFlightsInfOpen);
+        }
+
+        setIsFlightsOpen(!isFlightsOpen);
+    };
+
+    const toggleFlightInfo = () => {
+        if(isFlightsOpen){
+            setIsFlightsOpen(!isFlightsOpen);
+        }
+
+        saveCookie();
+        setIsFlightsInfOpen(!isFlightsInfOpen);
+    };
+
     function findFlights(){
         //save cookie before redirect
-
-
         saveCookie();
         window.location.href = '/findFlights'
     }
@@ -42,6 +63,10 @@ function TripDetails(){
         let date = new Date();
         date.setTime(date.getTime() +(minutes*60*1000));
         document.cookie = "origin=TPA"+",destination=" + tripLocation +",startDate=2024-12-12" + ";expires=" +date.toUTCString()
+    }
+
+    function getFlights(){
+        
     }
 
     return(
@@ -65,6 +90,20 @@ function TripDetails(){
                         <h3>Flights:</h3>
                         <div className="trip_section">
                             <div className="flights">
+                                <div id="flightsButtons">
+                                    <button onClick={toggleSearchFlights}>Find Flights</button>
+                                    <p> or </p>
+                                    <button onClick={toggleFlightInfo}>Enter Flight Info</button>
+                                </div>
+
+                                <div>
+                                    {isFlightsOpen && <FindFlights />}
+                                    {isFlightsInfOpen && <FlightDetails />}
+                                </div>
+
+                                <div>
+                                    
+                                </div>
                             </div>
                         </div>
 
