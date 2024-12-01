@@ -1,7 +1,7 @@
 #body {
   background-color: white;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
 }
@@ -78,4 +78,12 @@ ul {
 
 .button:hover {
   background-color: #ff8000;
+}
+
+#searchResults{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
 }

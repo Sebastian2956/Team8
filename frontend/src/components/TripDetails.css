@@ -160,3 +160,68 @@ h3 {
 #flightsButtons button:hover{
   background-color: #ff8000;
 }
+
+#flightSearch{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    max-width: 100%;
+    gap: 10px;
+    height: 3vh;
+}
+
+#flightSearch .textInput {
+    flex: 1;
+    max-width: 100%;
+    border-radius: 12px;
+    background-color: #FFFCF9;
+    color: black;
+    padding: 10px;
+    font-size: 14px;
+    border: 2px solid #ccc;
+    -webkit-transition: 0.5s;
+    outline: none;
+}
+
+#flightSearch .textInput:focus {
+    border: 2px solid #F18701;
+}
+
+#flightSearch .dateInput{
+    color-scheme: white;
+    flex: 1;
+    max-width: 100%;
+    border-radius: 12px;
+    background-color: #FFFCF9;
+    color: black;
+    padding: 10px;
+    font-size: 14px;
+    border: 2px solid #ccc;
+    -webkit-transition: 0.5s;
+    outline: none;
+}
+#flightSearch .dateInput:focus {
+    border: 2px solid #F18701;
+}
+
+#flightSearch p{
+    font-size: 14px;
+    margin: 0;
+    padding: 10px;
+    color: black;
+}
+
+#flightSearch button{
+    max-width: 100%;
+    min-width: 100px;
+    background-color: #f7ae4f;
+    border-radius: 32px;
+    border: 0;
+    font-size: 14px;
+    padding: 10px;
+    -webkit-transition: 0.5s;
+}
+
+#flightSearch button:hover{
+    background-color: #ff8000;
+}

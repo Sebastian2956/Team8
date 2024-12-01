@@ -1,6 +1,8 @@
 import { LOCALHOST_PORT } from '../config';
 import React, {useState} from 'react';
 import updateBudget from './Budget';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import './FlightDetails.css';
 
 function FlightDetails(){
@@ -10,13 +12,16 @@ function FlightDetails(){
 
     const [message, setMessage] = useState('');
     const [airline, setAirline] = useState('');
-    const [departureDate, setDepartureDate] = useState('');
+
     const [departureTime, setDepartureTime] = useState('');
-    const [arrivalDate, setArrivalDate] = useState('');
+
     const [arrivalTime, setArrivalTime] = useState('');
     const [departureLocation, setDepartureLocation] = useState('');
     const [arrivalLocation, setArrivalLocation] = useState('');
     const [price, setPrice] = useState('');
+
+    const [departureDate, setDepartureDate] = useState(new Date());
+    const [arrivalDate, setArrivalDate] = useState(new Date());
 
 
 
@@ -49,12 +54,10 @@ function FlightDetails(){
             <div id="addFlightBody">
                 <input type="text" id="airline" placeholder="Airline"
                     onChange={(e) => setAirline(e.target.value)} />
-                <input type="text" id="departureDate" placeholder="Departure Date"
-                    onChange={(e) => setDepartureDate(e.target.value)} />
+                <DatePicker selected={departureDate} onChange={(date: any) => setDepartureDate(date)} />
                 <input type="text" id="departureTime" placeholder="Departure Time"
                     onChange={(e) => setDepartureTime(e.target.value)} />
-                <input type="text" id="arrivalDate" placeholder="Arrival Date"
-                    onChange={(e) => setArrivalDate(e.target.value)} />
+                <DatePicker selected={arrivalDate} onChange={(date: any) => setArrivalDate(date)} />
                 <input type="text" id="arrivalTime" placeholder="Arrival Time"
                     onChange={(e) => setArrivalTime(e.target.value)} />
                 <input type="text" id="departureLocation" placeholder="Departure Location"

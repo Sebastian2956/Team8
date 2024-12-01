@@ -99,6 +99,7 @@ function TripDetails(){
                                 <div>
                                     {isFlightsOpen && <FindFlights />}
                                     {isFlightsInfOpen && <FlightDetails />}
+
                                 </div>
 
                                 <div>
