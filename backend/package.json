@@ -10,6 +10,7 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "amadeus": "^11.0.0",
         "axios": "^1.7.8",
         "backend": "file:",
         "body-parser": "^1.20.3",

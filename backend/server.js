@@ -10,7 +10,7 @@ let tripId = "0";
 
 //mongodb stuff
 const MongoClient = require('mongodb').MongoClient;
-                                    //password                                    //database name
+//password                                    //database name
 const url = process.env.MONGO_URI;
 const client = new MongoClient(url);
 client.connect();
@@ -20,124 +20,125 @@ app.use(bodyParser.json());
 
 
 let tokenCache = {
-  accessToken: null,
-  expirationTime: null
+    accessToken: null,
+    expirationTime: null
 }
 
 const getAccessToken = async () => {
 
-  let isTokenExists = tokenCache.accessToken !== null && tokenCache.expirationTime !== null
-  let isTokenValid = Date.now() < tokenCache.expirationTime
+    let isTokenExists = tokenCache.accessToken !== null && tokenCache.expirationTime !== null
+    let isTokenValid = Date.now() < tokenCache.expirationTime
 
-  const credentials = `grant_type=${encodeURIComponent('client_credentials')}&` +
-                      `client_id=${encodeURIComponent(process.env.AMADEUS_CLIENT_ID)}&` +
-                      `client_secret=${encodeURIComponent(process.env.AMADEUS_CLIENT_SECRET)}`;
+    const credentials = `grant_type=${encodeURIComponent('client_credentials')}&` +
+        `client_id=${encodeURIComponent(process.env.AMADEUS_CLIENT_ID)}&` +
+        `client_secret=${encodeURIComponent(process.env.AMADEUS_CLIENT_SECRET)}`;
 
-  try {
-    console.log(tokenCache.accessToken)
-    console.log(tokenCache.expirationTime)
-    if (isTokenExists && isTokenValid) {
-      console.log("using current token")
-      return tokenCache.accessToken
+    try {
+        console.log(tokenCache.accessToken)
+        console.log(tokenCache.expirationTime)
+        if (isTokenExists && isTokenValid) {
+            console.log("using current token")
+            return tokenCache.accessToken
+        }
+
+        const response = await axios.post('https://test.api.amadeus.com/v1/security/oauth2/token', credentials, {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Accept': 'application/json'
+            },
+        })
+
+        const { access_token, expires_in } = response.data
+        tokenCache.accessToken = access_token;
+        tokenCache.expirationTime = Date.now() + expires_in * 1000;
+
+        console.log("returned token", tokenCache.accessToken)
+        return tokenCache.accessToken
+    } catch (error) {
+        console.error('Error fetching token: ' + (error.response?.data || error.message))
+        throw new Error('Failed to authenticate with Amadeus API')
     }
-
-    const response = await axios.post('https://test.api.amadeus.com/v1/security/oauth2/token', credentials, {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Accept': 'application/json'
-      },
-    })
-
-    const { access_token, expires_in } = response.data
-    tokenCache.accessToken = access_token;
-    tokenCache.expirationTime = Date.now() + expires_in * 1000;
-
-    console.log("returned token" , tokenCache.accessToken)
-    return tokenCache.accessToken
-  } catch (error) {
-    console.error('Error fetching token: ' + (error.response?.data || error.message))
-    throw new Error('Failed to authenticate with Amadeus API')
-  }
 }
-const getNearestAirport = async (cityname)=>{
-    try{
+const getNearestAirport = async (cityname) => {
+    try {
         const token = await getAccessToken();
         const api_url = 'https://test.api.amadeus.com/v1/reference-data/locations/cities'
 
         const response = await axios.get(api_url, {
-        params: {
-            keyword: cityname,
-            include: "AIRPORTS"
-        },
-        headers: {
-            Authorization: `Bearer ${token}`
-        },
+            params: {
+                keyword: cityname,
+                include: "AIRPORTS"
+            },
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
         })
         return response.data;
 
-    }catch (error) {
+    } catch (error) {
         console.error('Error fetching airports: ', (error.response?.data || error.message))
         throw new Error('Failed to fetch airports')
-      }
+    }
 }
 
 const findFlightsFromToWhereOnDate = async (origin, destination, date, adults) => {
-  try {
+    try {
 
-    const token = await getAccessToken();
-    const api_url = 'https://test.api.amadeus.com/v2/shopping/flight-offers'
+        const token = await getAccessToken();
+        const api_url = 'https://test.api.amadeus.com/v2/shopping/flight-offers'
 
-    const response = await axios.get(api_url, {
-      params: {
-        originLocationCode: origin,
-        destinationLocationCode: destination,
-        departureDate: date,
-        adults: 1
-      },
-      headers: {
-        Authorization: `Bearer ${token}`
-      },
-    })
+        const response = await axios.get(api_url, {
+            params: {
+                originLocationCode: origin,
+                destinationLocationCode: destination,
+                departureDate: date,
+                adults: 1
+            },
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+        })
 
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching flight-offers: ', (error.response?.data || error.message))
-    throw new Error('Failed to fetch flight-offers')
-  }
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching flight-offers: ', (error.response?.data || error.message))
+        throw new Error('Failed to fetch flight-offers')
+    }
 }
 
 app.get('/api/findFlightsFromToWhereOnDate', async (req, res, next) => {
-  const { origin, destination, date } = req.query
+    const { origin, destination, date } = req.query
     console.log(origin + destination + date);
-  if (!origin || !destination || !date) {
-    return res.status(400).json({ error: 'Missing required parameter(s)' })
-  }
-
-  try {
-    const flightData = await findFlightsFromToWhereOnDate(origin, destination, date)
-    res.json(flightData)
-  } catch (error) {
-    res.status(500).json({ error: error.message })
-  }
-})
-app.get('/api/getNearestAirport', async(req,res,next) =>{
-    const {cityname} = req.query;
-    if(!cityname){
+    if (!origin || !destination || !date) {
         return res.status(400).json({ error: 'Missing required parameter(s)' })
     }
-    try{
+
+    try {
+        const flightData = await findFlightsFromToWhereOnDate(origin, destination, date)
+        res.json(flightData)
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+})
+
+app.get('/api/getNearestAirport', async (req, res, next) => {
+    const { cityname } = req.query;
+    if (!cityname) {
+        return res.status(400).json({ error: 'Missing required parameter(s)' })
+    }
+    try {
         const cityData = await getNearestAirport(cityname);
         res.json(cityData);
-    }catch(error){
-        res.status(500).json({error:error.message});
+    } catch (error) {
+        res.status(500).json({ error: error.message });
     }
 })
 
 //req represents incoming request from client
 //res represents server's response to client
 //next is a callback function that passes control to next middleware function
-    //callback function allow for async operations. Pass a callback function as argument to main function and is executed after the completion of the main function
-app.use((req,res,next) => {
+//callback function allow for async operations. Pass a callback function as argument to main function and is executed after the completion of the main function
+app.use((req, res, next) => {
     //set http headers
 
     //enables CORS, allows requests from any website to this server
@@ -163,26 +164,26 @@ app.use((req,res,next) => {
 
 //api endpoints
 //login               need async to use await
-app.post('/api/login', async (req, res, next) =>{
+app.post('/api/login', async (req, res, next) => {
     //incoming: login, password
     //outgoing: id, firstName, lastName, error
     var error = '';
 
-    const {login, password} = req.body;
+    const { login, password } = req.body;
 
     const db = client.db();
-    const results = await db.collection('Users').find({Login:login,Password:password}).toArray();
+    const results = await db.collection('Users').find({ Login: login, Password: password }).toArray();
     var id = -1;
     var fn = '';
     var ln = '';
 
     //results is an array of results of Users found with matching login and password
-    if(results.length > 0){
+    if (results.length > 0) {
         id = results[0]._id;
         fn = results[0].FirstName;
         ln = results[0].LastName;
     }
-    var ret = {id:id, firstName:fn, lastName:ln, error:''};
+    var ret = { id: id, firstName: fn, lastName: ln, error: '' };
     res.status(200).json(ret);
 });
 
@@ -226,29 +227,29 @@ app.post('/api/registerUser', async (req, res, next) => {
         }
 
         // Insert the new user
-        const result = await db.collection('Users').insertOne(newUser);app.delete('/api/deleteHotel', async (req, res, next) => {
-    const { hotelId } = req.body;
+        const result = await db.collection('Users').insertOne(newUser); app.delete('/api/deleteHotel', async (req, res, next) => {
+            const { hotelId } = req.body;
 
-    try {
-        const db = client.db();
+            try {
+                const db = client.db();
 
 
-        if (!ObjectId.isValid(hotelId)) {
-            return res.status(400).json({ error: 'Invalid hotelId format' });
-        }
+                if (!ObjectId.isValid(hotelId)) {
+                    return res.status(400).json({ error: 'Invalid hotelId format' });
+                }
 
-        const result = await db.collection('Hotels').deleteOne({ _id: new ObjectId(hotelId) });
+                const result = await db.collection('Hotels').deleteOne({ _id: new ObjectId(hotelId) });
 
-        if (result.deletedCount === 0) {
-            return res.status(404).json({ error: 'Hotel not found or already deleted' });
-        }
+                if (result.deletedCount === 0) {
+                    return res.status(404).json({ error: 'Hotel not found or already deleted' });
+                }
 
-        res.status(200).json({ message: 'Hotel deleted successfully' });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'An error occurred while deleting the hotel' });
-    }
-});
+                res.status(200).json({ message: 'Hotel deleted successfully' });
+            } catch (error) {
+                console.error(error);
+                res.status(500).json({ error: 'An error occurred while deleting the hotel' });
+            }
+        });
         res.status(200).json({ success: true, user: newUser });
     } catch (e) {
         res.status(500).json({ error: e.toString() });
@@ -256,11 +257,11 @@ app.post('/api/registerUser', async (req, res, next) => {
 });
 
 //add trip
-app.post('/api/addTrip', async (req, res, next) =>{
+app.post('/api/addTrip', async (req, res, next) => {
     //incoming: userId, tripName, startDate, endDate, location, description
     //outgoing: error
     var error = '';
-    const {userId, tripName, startDate, endDate, location, description, budget} = req.body;
+    const { userId, tripName, startDate, endDate, location, description, budget } = req.body;
 
     // Convert budget to a number (float) if it exists
     const budgetNumber = budget !== undefined ? parseFloat(budget) : 0.0;
@@ -268,76 +269,76 @@ app.post('/api/addTrip', async (req, res, next) =>{
         return res.status(400).json({ error: 'Budget must be a valid number' });
     }
 
-    const newTrip = {UserId:userId, TripName:tripName, StartDate:startDate, EndDate:endDate, Location:location, Description:description, Budget: budgetNumber};
+    const newTrip = { UserId: userId, TripName: tripName, StartDate: startDate, EndDate: endDate, Location: location, Description: description, Budget: budgetNumber };
 
-    try{
+    try {
         const db = client.db();
         const result = await db.collection('Trips').insertOne(newTrip);
-    }catch(e){
+    } catch (e) {
         error = e.toString();
     }
-    var ret = {newTrip, error:error};
+    var ret = { newTrip, error: error };
     res.status(200).json(ret);
 });
 
 //search trips
-app.post('/api/searchTrips', async (req, res, next) =>{
+app.post('/api/searchTrips', async (req, res, next) => {
     //incoming: userId, search
     //outgoing: results[], error
 
     var error = '';
-    const{userId, search} = req.body;
+    const { userId, search } = req.body;
     var _search = search.trim();
     const db = client.db();
     //search tripName, startDate, endDate, location, description
     const results = await db.collection('Trips').find({
         $and: [
-            {"UserId": userId},
+            { "UserId": userId },
             {
                 $or: [
-                    {"TripName": {$regex: _search, $options: 'i'}},
-                    {"StartDate": {$regex: _search, $options: 'i'}},
-                    {"EndDate": {$regex: _search, $options: 'i'}},
-                    {"Location": {$regex: _search, $options: 'i'}},
-                    {"Description": {$regex: _search, $options: 'i'}}
+                    { "TripName": { $regex: _search, $options: 'i' } },
+                    { "StartDate": { $regex: _search, $options: 'i' } },
+                    { "EndDate": { $regex: _search, $options: 'i' } },
+                    { "Location": { $regex: _search, $options: 'i' } },
+                    { "Description": { $regex: _search, $options: 'i' } }
                 ]
             }
         ]
     }).toArray();
     var _ret = [];
-    for(var i = 0; i < results.length; i++){
+    for (var i = 0; i < results.length; i++) {
         _ret.push(results[i]);
     }
-    var ret = {results:_ret, error:error};
+    var ret = { results: _ret, error: error };
     res.status(200).json(ret);
 });
 
 
 //add Flight
-app.post('/api/addFlight', async (req, res, next) =>{
+app.post('/api/addFlight', async (req, res, next) => {
     let error = '';
-    const {tripId, airline, departureDate, departureTime, arrivalDate, arrivalTime, departureLocation, arrivalLocation, price} = req.body;
+    const { tripId, airline, departureDate, departureTime, arrivalDate, arrivalTime, departureLocation, arrivalLocation, price } = req.body;
 
     const priceNumber = price !== undefined ? parseFloat(price) : 0.0;
     if (isNaN(priceNumber)) {
         return res.status(400).json({ error: 'Budget must be a valid number' });
     }
 
-    const newFlight = {TripId:tripId, Airline:airline, DepartureDate:departureDate, DepartureTime:departureTime, ArrivalDate:arrivalDate, ArrivalTime:arrivalTime, DepartureLocation:departureLocation, ArrivalLocation:arrivalLocation, Price:priceNumber};
+    const newFlight = { TripId: tripId, Airline: airline, DepartureDate: departureDate, DepartureTime: departureTime, ArrivalDate: arrivalDate, ArrivalTime: arrivalTime, DepartureLocation: departureLocation, ArrivalLocation: arrivalLocation, Price: priceNumber };
 
-    try{
+    try {
         const db = client.db();
         const result = await db.collection('Flights').insertOne(newFlight);
-    }catch(e){
-        error  = e.toString();
+    } catch (e) {
+        error = e.toString();
     }
-    var ret = {newFlight, error: error}
+    var ret = { newFlight, error: error }
     res.status(200).json(ret);
 });
 
 //updateBudget
 app.post('/api/updateBudget', async (req, res, next) => {
-    const {tripId, amount} = req.body;
+    const { tripId, amount } = req.body;
     const amountNumber = parseFloat(amount);
 
     try {
@@ -383,24 +384,24 @@ app.post('/api/updateBudget', async (req, res, next) => {
 });
 
 //add hotel
-app.post('/api/addHotel', async (req, res, next) =>{
+app.post('/api/addHotel', async (req, res, next) => {
     let error = '';
-    const {tripId, hotel, checkIn, checkOut, location, price} = req.body;
+    const { tripId, hotel, checkIn, checkOut, location, price } = req.body;
 
     const priceNumber = price !== undefined ? parseFloat(price) : 0.0;
     if (isNaN(priceNumber)) {
         return res.status(400).json({ error: 'Budget must be a valid number' });
     }
 
-    const newHotel = {TripId:tripId, Hotel:hotel, CheckIn:checkIn, CheckOut:checkOut, Location:location, Price:priceNumber};
+    const newHotel = { TripId: tripId, Hotel: hotel, CheckIn: checkIn, CheckOut: checkOut, Location: location, Price: priceNumber };
 
-    try{
+    try {
         const db = client.db();
         const result = await db.collection('Hotels').insertOne(newHotel);
-    }catch(e){
-        error  = e.toString();
+    } catch (e) {
+        error = e.toString();
     }
-    var ret = {newHotel, error: error}
+    var ret = { newHotel, error: error }
     res.status(200).json(ret);
 });
 
@@ -412,29 +413,30 @@ app.delete('/api/deleteTrip', async (req, res, next) => {
         const db = client.db();
 
         // Ensure tripId is valid and convert it to ObjectId
-        if (!ObjectId.isValid(tripId)) {app.delete('/api/deleteHotel', async (req, res, next) => {
-    const { hotelId } = req.body;
+        if (!ObjectId.isValid(tripId)) {
+            app.delete('/api/deleteHotel', async (req, res, next) => {
+                const { hotelId } = req.body;
 
-    try {
-        const db = client.db();
+                try {
+                    const db = client.db();
 
 
-        if (!ObjectId.isValid(hotelId)) {
-            return res.status(400).json({ error: 'Invalid hotelId format' });
-        }
+                    if (!ObjectId.isValid(hotelId)) {
+                        return res.status(400).json({ error: 'Invalid hotelId format' });
+                    }
 
-        const result = await db.collection('Hotels').deleteOne({ _id: new ObjectId(hotelId) });
+                    const result = await db.collection('Hotels').deleteOne({ _id: new ObjectId(hotelId) });
 
-        if (result.deletedCount === 0) {
-            return res.status(404).json({ error: 'Hotel not found or already deleted' });
-        }
+                    if (result.deletedCount === 0) {
+                        return res.status(404).json({ error: 'Hotel not found or already deleted' });
+                    }
 
-        res.status(200).json({ message: 'Hotel deleted successfully' });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'An error occurred while deleting the hotel' });
-    }
-});
+                    res.status(200).json({ message: 'Hotel deleted successfully' });
+                } catch (error) {
+                    console.error(error);
+                    res.status(500).json({ error: 'An error occurred while deleting the hotel' });
+                }
+            });
             return res.status(400).json({ error: 'Invalid tripId format' });
         }
 
@@ -505,4 +507,47 @@ app.put('/api/updateTrip', async (req, res) => {
     }
 });
 
+app.get('/api/flights', async (req, res, next) => {
+    const { TripId } = req.query; // Match case-sensitive query parameter
+
+    if (!TripId) {
+        return res.status(400).json({ message: "TripId is required" });
+    }
+
+    try {
+        const db = client.db();
+
+        // Query MongoDB for flights with the provided TripId
+        const flights = await db.collection('Flights').find({ TripId }).toArray();
+
+        if (flights.length === 0) {
+            return res.status(200).json({
+                flights: [],
+                message: "No flights booked. Start your adventure by booking through us!"
+            });
+        }
+
+        res.status(200).json({ flights });
+    } catch (error) {
+        console.error("Error fetching flights:", error);
+        res.status(500).json({ message: "Server error. Please try again later." });
+    }
+});
+
+app.get('/api/hotels', async (req, res) => {
+    try {
+        const { TripId } = req.query;
+
+        if (!TripId) {
+            return res.status(400).json({ message: 'TripId is required' });
+        }
+
+        const hotels = await db.collection('Hotels').find({ TripId }).toArray();
+
+        res.status(200).json({ hotels });
+    } catch (error) {
+        console.error("Error fetching hotels:", error);
+        res.status(500).json({ message: 'Server error. Please try again later.' });
+    }
+});
 app.listen(process.env.LOCALHOST_PORT || 3000);

@@ -84,13 +84,12 @@ h3 {
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-/*.trip_section h3 {
-    margin-bottom: 10px;
-}*/
-
 .flights, .hotels {
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
     gap: 10px;
     margin-top: 15px;
 }
@@ -147,7 +146,10 @@ h3 {
 }
 
 #flightsButtons button {
+    display: flex;
     background-color: #f7ae4f;
+    justify-content: center;
+    align-items: center;
     border-radius: 32px;
     border:0;
     font-size:14px;
