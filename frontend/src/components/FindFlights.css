@@ -21,8 +21,8 @@ ul {
   padding-top: 0px;
   border-radius: 16px;
   box-shadow: 5px 5px 10px gray;
-  width: 20vw;
-  height: 10vh;
+  min-width: 20vw;
+  min-height: 180px;
   margin: 20px;
 }
 
