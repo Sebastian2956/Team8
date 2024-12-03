@@ -26,6 +26,32 @@ function TripDetails(){
     const [isFlightsInfOpen, setIsFlightsInfOpen] = useState(false);
 
     const [flightSelected, setFlightSelected] = useState(false);
+    const [flightList, setSavedFlightList] = useState<any>([]);
+
+    var allSavedFlights: Flight[] = [];
+
+    class Flight {
+        public origin: string;
+        public arrival: string;
+        public departureTime: string;
+        public arrivalTime: string;
+        public price: number;
+        public stops: number;
+        public date: string;
+        public airline: string;
+
+
+        public constructor(origin: string, arrival: string, departureTime: string, arrivalTime: string, price: number, stops: number, date: string, airline: string) {
+            this.origin = origin;
+            this.arrival = arrival;
+            this.arrivalTime = arrivalTime;
+            this.departureTime = departureTime;
+            this.price = price;
+            this.stops = stops;
+            this.date = date;
+            this.airline = airline;
+        }
+    }
     
     console.log(tripStartDate);
 
@@ -88,6 +114,7 @@ function TripDetails(){
             console.log(_results);
 
             // Generate buttons for each search result
+            setSavedFlights(_results);
            
         } catch (error: any) {
             setResults([error.toString()]);
@@ -108,6 +135,49 @@ function TripDetails(){
         
     };
 
+    function setSavedFlights(data: any){
+
+        for(var i = 0; i < data.length; i++){
+            console.log(data[i]);
+            let flight = new Flight(data[i].DepartureLocation, data[i].ArrivalLocation, data[i].DepartureTime, data[i].ArrivalTime, data[i].Price, 0, data[i].DepartureDate, data[i].Airline
+            );
+            allSavedFlights.push(flight);
+        }
+
+        const savedFlightDivs = allSavedFlights.map((flight, index) => {
+            return(
+                <div key={index} className="SavedFlight" data-key={index}>
+                <div className="departureArrival">
+                    <ul>
+                        <li className="airportName"> {flight.origin}</li>
+                        <li>{flight.departureTime}</li>
+                    </ul>
+
+                    <ul>
+                        <li className="airportName"> {flight.arrival}</li>
+                        <li>{flight.arrivalTime}</li>
+                    </ul>
+                    {
+                        flight.stops > 0 ? (<h2 className="stops">{flight.stops} Stops</h2>) : (<h2></h2>)
+                    }
+                </div>
+                <div id="dateAndPrice">
+                    <h3>{flight.date}</h3>
+                    <h2>${flight.price}</h2>
+                    <h2>{flight.airline}</h2>
+                </div>
+                <button>Delete Flight</button>
+            </div>
+            );
+        });
+
+        setSavedFlightList(savedFlightDivs);
+    }
+
+    async function deleteFlight(flightId: string){
+        
+    }
+
     return(
         <div className="trip_details">
             <button onClick={goBack} className="go_back">
@@ -125,7 +195,6 @@ function TripDetails(){
                             {tripStartDate} - {tripEndDate}
                         </p>
                         <h3>Budget: ${tripBudget}</h3>
-                        <button onClick ={findFlights}>Find Flights</button>
                         <h3>Flights:</h3>
                         <div className="trip_section">
                             <div className="flights">
@@ -134,11 +203,14 @@ function TripDetails(){
                                     <p> or </p>
                                     <button onClick={toggleFlightInfo}>Enter Flight Info</button>
                                 </div>
+                                
+                                <div id="savedFlightList">
+                                    {flightList}
+                                </div>
 
                                 <div>
                                     {isFlightsOpen && <FindFlights parentCallback={handleCallback}/>}
                                     {isFlightsInfOpen && <FlightDetails />}
-
                                 </div>
 
                                 <div>
