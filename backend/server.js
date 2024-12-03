@@ -316,14 +316,14 @@ app.post('/api/searchTrips', async (req, res, next) =>{
 //add Flight
 app.post('/api/addFlight', async (req, res, next) =>{
     let error = '';
-    const {tripId, airline, departureDate, departureTime, arrivalDate, arrivalTime, departureLocation, arrivalLocation, price} = req.body;
+    const {tripId, airline, departureDate, departureTime, arrivalTime, departureLocation, arrivalLocation, price} = req.body;
 
     const priceNumber = price !== undefined ? parseFloat(price) : 0.0;
     if (isNaN(priceNumber)) {
         return res.status(400).json({ error: 'Budget must be a valid number' });
     }
 
-    const newFlight = {TripId:tripId, Airline:airline, DepartureDate:departureDate, DepartureTime:departureTime, ArrivalDate:arrivalDate, ArrivalTime:arrivalTime, DepartureLocation:departureLocation, ArrivalLocation:arrivalLocation, Price:priceNumber};
+    const newFlight = {TripId:tripId, Airline:airline, DepartureDate:departureDate, DepartureTime:departureTime, ArrivalTime:arrivalTime, DepartureLocation:departureLocation, ArrivalLocation:arrivalLocation, Price:priceNumber};
 
     try{
         const db = client.db();
@@ -334,6 +334,32 @@ app.post('/api/addFlight', async (req, res, next) =>{
     var ret = {newFlight, error: error}
     res.status(200).json(ret);
 });
+
+//search Flight
+app.post('/api/searchFlights', async(req, res, next) =>{
+    let error = '';
+    const {userId, tripId} = req.body;
+    
+
+    try{
+        const db = client.db();
+        const results = await db.collection('Flights').find({
+            $and: [
+                {"TripId": tripId}
+            ]
+        }).toArray();
+        var _ret = [];
+        for(var i = 0; i < results.length; i++){
+            _ret.push(results[i]);
+        }
+        var ret = {results:_ret, error:error};
+        res.status(200).json(ret);
+       
+    }catch(e){
+        error  = e.toString();
+    }
+    
+})
 
 //updateBudget
 app.post('/api/updateBudget', async (req, res, next) => {
