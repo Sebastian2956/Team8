@@ -125,7 +125,6 @@ function TripDetails(){
                             {tripStartDate} - {tripEndDate}
                         </p>
                         <h3>Budget: ${tripBudget}</h3>
-                        <button onClick ={findFlights}>Find Flights</button>
                         <h3>Flights:</h3>
                         <div className="trip_section">
                             <div className="flights">
