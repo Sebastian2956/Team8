@@ -220,13 +220,166 @@ body {
   }
   
   .trip-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff;
     padding: 15px;
-    border-radius: 10px;
-    font-size: 16px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* transition: box-shadow 0.3s ease-in-out; */
+    font-size: 18px;
     color: black;
     font-weight: bold;
   }
+
+  .trip-card:hover {
+    background-color: #e6e6e6;
+  }
+
+  .trip-details {
+    font-size: 18px;
+    font-weight: 500;
+  }
+
+  .trip-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 15px;
+  }
+
+  .edit-btn {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 16px;
+    margin-left: 20px;
+  }
+
+  .edit-btn:hover {
+    opacity: 0.9;
+  }
   
+  .delete-btn {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 16px;
+    margin-left: 20px;
+  }
+
+  .delete-btn:hover {
+    opacity: 0.9;
+  }
+
+  /* Edit Form Container */
+.edit-trip-container {
+  /*margin: 20px auto;
+  padding: 15px;
+  max-width: 400px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);*/
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+}
+
+/* Form Header */
+.edit-trip-container h3 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 10px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.edit-trip-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Input Fields */
+.edit-trip-form input {
+  /*display: block;
+  width: calc(100% - 20px);
+  margin: 10px auto;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+  transition: border 0.2s;*/
+  flex: 1;
+  min-width: 120px;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.edit-trip-form input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Buttons Container */
+.edit-trip-buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+/* Save Button */
+.save-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  font-size: 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  /*transition: background-color 0.3s;
+  margin-bottom: 10px;*/
+}
+
+.save-btn:hover {
+  background-color: #007bff;
+}
+
+/* Cancel Button */
+.cancel-btn {
+  background-color: #333;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  font-size: 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  /*transition: background-color 0.3s;*/
+}
+
+.cancel-btn:hover {
+  background-color: #ccc;
+}
+
+
   /* Right Panel */
   .right-panel {
     flex: 1;

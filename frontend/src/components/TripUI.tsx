@@ -26,6 +26,8 @@ function TripUI() {
     const [description, setDescriptionValue] = useState('');
     const [budget, setBudgetValue] = useState('');
     const [showAddTripForm, setShowAddTripForm] = useState(false);
+    const [editedTripData, setEditedTripData] = useState<any>({});
+    const [tripBeingEdited, setTripBeingEdited] = useState<any>(null);
 
     async function addTrip(event: any): Promise<void> {
         event.preventDefault();
@@ -61,18 +63,101 @@ function TripUI() {
             const _results = res.results;
 
             // Generate buttons for each search result
-            const resultButtons = _results.map((trip: any, index: number) => (
+            /* const resultButtons = _results.map((trip: any, index: number) => (
                 <button key={trip._id || index} onClick={() => handleTripClick(trip)}>
                     {trip.Location} - {trip.StartDate}
                 </button>
-            ));
+            )); */
 
-            setResults(['Trips have been retrieved']);
-            setTripList(resultButtons);
+            setResults(res.results.map((trip:any) => '${trip.Location} - ${trip.StartDate}'));
+            setTripList(res.results);
         } catch (error: any) {
             setResults([error.toString()]);
         }
     };
+
+    // Delete Trip Function
+    async function handleDeleteTrip(tripId: string) {
+        try {
+            const response = await fetch(`${LOCALHOST_PORT}/api/deleteTrip`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ tripId, userId }),
+            });
+        
+            const result = await response.json();
+        
+            if (result.error) {
+            setMessage(`Error deleting trip: ${result.error}`);
+            } else {
+            setMessage('Trip deleted successfully!');
+            // Optionally refresh the trip list
+            searchTrip(new Event(''));
+            }
+        } catch (error) {
+            setMessage(`Failed to delete trip: ${error}`);
+        }
+    }
+
+    // Edit Trip function
+    function handleEditTrip(trip: any) {
+        if (!trip || !trip._id) {
+            setMessage("Invalid trip selected for editing.");
+            return;
+        }
+
+        setTripBeingEdited(trip); // Set the trip being edited
+        setEditedTripData({
+            tripName: trip.tripName,
+            startDate: trip.startDate,
+            endDate: trip.endDate,
+            location: trip.location,
+            description: trip.description || "",
+            budget: trip.budget?.toString() || ""
+        });
+    }
+
+    // Save Edited Trip
+    async function saveEditedTrip(event: any) : Promise<void>{
+        event.preventDefault();
+
+        if (!tripBeingEdited) {
+            setMessage("No trip selected for editing.");
+            return;
+        }
+
+        const { tripName, startDate, endDate, location, description, budget } = editedTripData;
+
+        const updateData = {
+            tripName,
+            startDate,
+            endDate,
+            location,
+            description: description || "",
+            budget: parseFloat(budget) || 0,
+        };
+
+        const obj = { tripId: tripBeingEdited._id, updateData };
+        const js = JSON.stringify(obj);
+
+        try {
+            const response = await fetch( LOCALHOST_PORT + '/api/updateTrip', {
+                method: 'PUT', body: js, headers: { 'Content-Type': 'application/json' }
+            });
+            const result = await response.json();
+
+            if (result.error) {
+                setMessage('Error updating trip: ' + result.error);
+            } else {
+                setMessage('Trip updated successfully!');
+                setTripBeingEdited(null);  // Reset after saving
+                setEditedTripData(null);
+                searchTrip(new Event('')); // Refresh trip list
+            }
+        } catch (error) {
+            setMessage(`Error occurred: ${error}`);
+        }
+    }
 
     function doLogout(event: any) : void{
         event.preventDefault();
@@ -88,6 +173,11 @@ function TripUI() {
         alert(`Trip data: ${JSON.stringify(tripData)}`);
         localStorage.setItem('trip_data', JSON.stringify(tripData));
         window.location.href = '/thisTrip';
+    }
+
+    // Handle input change in the edit form
+    function handleEditInputChange(e: any) {
+        setEditedTripData({ ...editedTripData, [e.target.name]: e.target.value });
     }
 
     function handleSearchTextChange(e: any): void {
@@ -126,12 +216,12 @@ function TripUI() {
                 const _results = res.results;
 
                 // Generate buttons for each search result
-                const resultButtons = _results.map((trip: any, index: number) => (
+                /* const resultButtons = _results.map((trip: any, index: number) => (
                     <button key={trip._id || index} onClick={() => handleTripClick(trip)}>
                         {trip.Location} - {trip.StartDate}
                     </button>
-                ));
-                setTripList(resultButtons);
+                )); */
+                setTripList(_results || []);
             }catch(error: any) {
                 setMessage(error.toString());
             }
@@ -268,16 +358,85 @@ function TripUI() {
                 </div>
 
                 <div className="trips-list">
-                {/* {trips.map((trip, index) => (
-                  <div
-                    key={index}
-                    className="trip-card"
-                    style={{ backgroundColor: trip.color }}
-                  >
-                    {trip.name} - {trip.date}
-                  </div>
-                ))} */}
-                {tripList}
+                    {/* {trips.map((trip, index) => (
+                    <div
+                        key={index}
+                        className="trip-card"
+                        style={{ backgroundColor: trip.color }}
+                    >
+                        {trip.name} - {trip.date}
+                    </div>
+                    ))} */}
+                    
+                    {tripBeingEdited && (
+                        <div className="edit-trip-container">
+                            <h3>Edit Trip</h3>
+                            <form className="edit-trip-form" onSubmit={saveEditedTrip}>
+                                <input
+                                    type="text"
+                                    name="tripName"
+                                    value={editedTripData.tripName || ''}
+                                    onChange={handleEditInputChange}
+                                    placeholder="Trip Name"
+                                />
+                                <input
+                                    type="text"
+                                    name="startDate"
+                                    value={editedTripData.startDate || ''}
+                                    onChange={handleEditInputChange}
+                                    placeholder="Start Date"
+                                />
+                                <input
+                                    type="text"
+                                    name="endDate"
+                                    value={editedTripData.endDate || ''}
+                                    onChange={handleEditInputChange}
+                                    placeholder="End Date"
+                                />
+                                <input
+                                    type="text"
+                                    name="location"
+                                    value={editedTripData.location || ''}
+                                    onChange={handleEditInputChange}
+                                    placeholder="Location"
+                                />
+                                <input
+                                    type="text"
+                                    name="description"
+                                    value={editedTripData.description || ''}
+                                    onChange={handleEditInputChange}
+                                    placeholder="Description"
+                                />
+                                <input
+                                    type="text"
+                                    name="budget"
+                                    value={editedTripData.budget || ''}
+                                    onChange={handleEditInputChange}
+                                    placeholder="Budget"
+                                />
+                                <div className="edit-trip-buttons">
+                                    <button type="submit">Save</button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setTripBeingEdited(null)}>
+                                        Cancel
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    )}
+
+                    {tripList.map((trip: any, index: number) => (
+                        <div key={index} className="trip-card" onClick={() => handleTripClick(trip)} style={{cursor: 'pointer'}}>
+                            <div className="trip-details">
+                                {trip.Location} - {trip.StartDate}
+                            </div>
+                            <div className="trip-actions">
+                                <button className="edit-btn" onClick={(e) => {e.stopPropagation(); handleEditTrip(trip);} } >Edit</button>
+                                <button className="delete-btn" onClick={(e) => {e.stopPropagation(); handleDeleteTrip(trip._id);} }>Delete</button>
+                            </div>
+                        </div>
+                    ))}
               </div>
             </section>
     
