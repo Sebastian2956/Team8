@@ -95,6 +95,48 @@ function FindFlights(props:{parentCallback: (childData: boolean) => void}) {
 
         
     }
+    async function DepartFlightToDatabase(event: any){
+        event.preventDefault();
+        var flightIndex = event.target.parentNode.getAttribute("data-key");
+        console.log(flightIndex);
+        console.log(allFlights[flightIndex]);
+        var selectedFlight = allFlights[flightIndex];
+        //send to db
+
+        const obj ={userId, 
+            tripId: tripId, 
+            airline: selectedFlight.airline, 
+            departureDate: selectedFlight.date, 
+            departureTime: selectedFlight.departureTime,
+            arrivalTime: selectedFlight.arrivalTime,
+            departureLocation: selectedFlight.origin,
+            arrivalLocation: selectedFlight.arrival,
+            price: selectedFlight.price
+        } 
+
+        const js = JSON.stringify(obj);
+        /* query database */
+
+        try{
+            const response = await fetch( LOCALHOST_PORT + '/api/addFlight', {
+                method: 'POST', body: js, headers: { 'Content-Type': 'application/json' }
+            });
+            const txt = await response.text();
+            const res = JSON.parse(txt);
+            if (res.error.length > 0) {
+                setMessage('API Error: ' + res.error);
+            } else {
+                console.log('Flight Added');
+                props.parentCallback(true);
+            }
+
+        }catch(error:any){
+            setMessage(error.toString());
+        }
+        
+
+        
+    }
 
     function setFlights(data: any) {
         for (var i = 0; i < 5; i++) {
@@ -129,7 +171,7 @@ function FindFlights(props:{parentCallback: (childData: boolean) => void}) {
         }
 
         const flightDivs = allFlights.map((flight, index: number) => (
-            <div key={index} className="flightCard">
+            <div key={index} className="flightCard" data-key={index}>
                 <div className="departureArrival">
                     <ul>
                         <li className="airportName"> {flight.origin}</li>
@@ -148,6 +190,7 @@ function FindFlights(props:{parentCallback: (childData: boolean) => void}) {
                     <h2>${flight.price}</h2>
                     <h2>{flight.airline}</h2>
                 </div>
+                <button onClick={DepartFlightToDatabase}>Select Flight</button>
             </div>
         ));
 
