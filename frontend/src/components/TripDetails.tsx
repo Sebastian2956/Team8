@@ -1,10 +1,15 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import FindFlights from './FindFlights';
 import FlightDetails from './FlightDetails';
 
 import './TripDetails.css'
+import { LOCALHOST_PORT } from '../config';
 
 function TripDetails(){
+    const _ud: any = localStorage.getItem('user_data');
+    const ud = JSON.parse(_ud);
+    const userId: string = ud.id;
+
     let _td: any = localStorage.getItem('trip_data');
     let td = JSON.parse(_td);
     let tripId: string = td.TripId;
@@ -16,8 +21,11 @@ function TripDetails(){
     const [tripBudget, setTripBudget] = useState(td.Budget);
     const [itinerary, setItinerary] = useState<string[]>([]);
 
+    const [searchResults, setResults] = useState<string[]>([]);
     const [isFlightsOpen, setIsFlightsOpen] = useState(false);
     const [isFlightsInfOpen, setIsFlightsInfOpen] = useState(false);
+
+    const [flightSelected, setFlightSelected] = useState(false);
     
     console.log(tripStartDate);
 
@@ -65,9 +73,40 @@ function TripDetails(){
         document.cookie = "origin=TPA"+",destination=" + tripLocation +",startDate=2024-12-12" + ";expires=" +date.toUTCString()
     }
 
-    function getFlights(){
+    async function getFlights(){
+       
+        const obj = {  tripId };
+        const js = JSON.stringify(obj);
+
+        try {
+            const response = await fetch( LOCALHOST_PORT + '/api/searchFlights', {
+                method: 'POST', body: js, headers: { 'Content-Type': 'application/json' }
+            });
+            const txt = await response.text();
+            const res = JSON.parse(txt);
+            const _results = res.results;
+            console.log(_results);
+
+            // Generate buttons for each search result
+           
+        } catch (error: any) {
+            setResults([error.toString()]);
+        }
         
     }
+    useEffect(() =>{
+        const fetchData = async() =>{
+            getFlights();
+            setFlightSelected(false);
+        }
+        fetchData();
+    },[flightSelected])
+
+    function handleCallback(childData: boolean){
+        setFlightSelected(childData);
+        console.log(childData);
+        
+    };
 
     return(
         <div className="trip_details">
@@ -97,7 +136,7 @@ function TripDetails(){
                                 </div>
 
                                 <div>
-                                    {isFlightsOpen && <FindFlights />}
+                                    {isFlightsOpen && <FindFlights parentCallback={handleCallback}/>}
                                     {isFlightsInfOpen && <FlightDetails />}
 
                                 </div>
