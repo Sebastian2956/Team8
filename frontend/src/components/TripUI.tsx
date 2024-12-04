@@ -105,8 +105,10 @@ function TripUI() {
             setMessage("Invalid trip selected for editing.");
             return;
         }
+        console.log(trip);
 
         setTripBeingEdited(trip); // Set the trip being edited
+        /*
         setEditedTripData({
             tripName: trip.tripName,
             startDate: trip.startDate,
@@ -115,11 +117,13 @@ function TripUI() {
             description: trip.description || "",
             budget: trip.budget
         });
+        */
     }
 
     // Save Edited Trip
     async function saveEditedTrip(event: any) : Promise<void>{
         event.preventDefault();
+        console.log("going to database")
 
         if (!tripBeingEdited) {
             setMessage("No trip selected for editing.");
@@ -129,11 +133,11 @@ function TripUI() {
         const { tripName, startDate, endDate, location, description, budget } = editedTripData;
 
         const updateData = {
-            tripName,
-            startDate,
-            endDate,
-            location,
-            description: description || "",
+            TripName: tripName,
+            StartDate: startDate,
+            EndDate: endDate,
+            Location: location,
+            Description: description || "",
             budget: parseFloat(budget) || 0,
         };
 
@@ -149,6 +153,7 @@ function TripUI() {
             if (result.error) {
                 setMessage('Error updating trip: ' + result.error);
             } else {
+                console.log("success");
                 setMessage('Trip updated successfully!');
                 setTripBeingEdited(null);  // Reset after saving
                 setEditedTripData(null);
@@ -157,6 +162,7 @@ function TripUI() {
                 searchTrip(new Event('')); // Refresh trip list
             }
         } catch (error) {
+            
             setMessage(`Error occurred: ${error}`);
         }
     }
@@ -179,6 +185,7 @@ function TripUI() {
 
     // Handle input change in the edit form
     function handleEditInputChange(e: any) {
+        console.log(e.target.name);
         setEditedTripData({ ...editedTripData, [e.target.name]: e.target.value });
     }
 
@@ -229,7 +236,7 @@ function TripUI() {
             }
         }
         fetchData();
-    }, []);
+    }, [editedTripData]);
 
 
     /*return (
