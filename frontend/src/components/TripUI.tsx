@@ -113,7 +113,7 @@ function TripUI() {
             endDate: trip.endDate,
             location: trip.location,
             description: trip.description || "",
-            budget: trip.budget?.toString() || ""
+            budget: trip.budget
         });
     }
 
@@ -152,6 +152,8 @@ function TripUI() {
                 setMessage('Trip updated successfully!');
                 setTripBeingEdited(null);  // Reset after saving
                 setEditedTripData(null);
+
+                setTripList((prevTripList) => prevTripList.map((trip) => trip === tripBeingEdited._id ? { ...trip, ...updateData } : trip))
                 searchTrip(new Event('')); // Refresh trip list
             }
         } catch (error) {
