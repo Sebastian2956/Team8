@@ -530,5 +530,25 @@ app.put('/api/updateTrip', async (req, res) => {
         res.status(500).json({ error: 'An error occurred while updating the trip' });
     }
 });
+app.delete('/api/deleteFlight', async (req, res, next) => { 
+    const { flightId } = req.body; 
+
+    try { 
+        const db = client.db(); 
+        if (!ObjectId.isValid(flightId)) { 
+            return res.status(400).json({ error: 'Invalid flightId format' }); 
+        } 
+        
+        const result = await db.collection('Flights').deleteOne({ _id: new ObjectId(flightId) }); 
+
+        if (result.deletedCount === 0) { 
+                return res.status(404).json({ error: 'Flight not found or already deleted' }); } 
+                res.status(200).json({ message: 'Flight deleted successfully' }); 
+            
+            } catch (error) { 
+                console.error(error); 
+                res.status(500).json({ error: 'An error occurred while deleting the flight' }); 
+            } 
+        });
 
 app.listen(process.env.LOCALHOST_PORT || 3000);

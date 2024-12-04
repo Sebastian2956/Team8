@@ -28,9 +28,12 @@ function TripDetails(){
     const [flightSelected, setFlightSelected] = useState(false);
     const [flightList, setSavedFlightList] = useState<any>([]);
 
+    const [message, setMessage] = useState('');
+
     var allSavedFlights: Flight[] = [];
 
     class Flight {
+        public id: string;
         public origin: string;
         public arrival: string;
         public departureTime: string;
@@ -41,7 +44,8 @@ function TripDetails(){
         public airline: string;
 
 
-        public constructor(origin: string, arrival: string, departureTime: string, arrivalTime: string, price: number, stops: number, date: string, airline: string) {
+        public constructor(id:string, origin: string, arrival: string, departureTime: string, arrivalTime: string, price: number, stops: number, date: string, airline: string) {
+            this.id = id;
             this.origin = origin;
             this.arrival = arrival;
             this.arrivalTime = arrivalTime;
@@ -139,7 +143,7 @@ function TripDetails(){
 
         for(var i = 0; i < data.length; i++){
             console.log(data[i]);
-            let flight = new Flight(data[i].DepartureLocation, data[i].ArrivalLocation, data[i].DepartureTime, data[i].ArrivalTime, data[i].Price, 0, data[i].DepartureDate, data[i].Airline
+            let flight = new Flight(data[i]._id,data[i].DepartureLocation, data[i].ArrivalLocation, data[i].DepartureTime, data[i].ArrivalTime, data[i].Price, 0, data[i].DepartureDate, data[i].Airline
             );
             allSavedFlights.push(flight);
         }
@@ -166,7 +170,7 @@ function TripDetails(){
                     <h2>${flight.price}</h2>
                     <h2>{flight.airline}</h2>
                 </div>
-                <button>Delete Flight</button>
+                <button onClick={deleteFlight}>Delete Flight</button>
             </div>
             );
         });
@@ -174,7 +178,30 @@ function TripDetails(){
         setSavedFlightList(savedFlightDivs);
     }
 
-    async function deleteFlight(flightId: string){
+    async function deleteFlight(event: any){
+        var index = event.target.parentNode.getAttribute("data-key");
+
+        var flightId = allSavedFlights[index].id;
+        console.log("deleteing flight");
+        const obj = {flightId: flightId};
+        const js = JSON.stringify(obj);
+        try {
+            const response = await fetch( LOCALHOST_PORT + '/api/deleteFlight', {
+                method: 'DELETE', body: js, headers: { 'Content-Type': 'application/json' }
+            });
+            const result = await response.json();
+
+            if (result.error) {
+                setMessage('Error deleting flight: ' + result.error);
+            } else {
+                
+            }
+        } catch (error) {
+            setMessage(`Error occurred: ${error}`);
+        }
+        event.target.parentNode.remove();
+
+
         
     }
 
