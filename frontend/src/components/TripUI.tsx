@@ -138,7 +138,7 @@ function TripUI() {
             EndDate: endDate,
             Location: location,
             Description: description || "",
-            budget: parseFloat(budget) || 0,
+            Budget: parseFloat(budget) || 0,
         };
 
         const obj = { tripId: tripBeingEdited._id, updateData };
@@ -155,8 +155,8 @@ function TripUI() {
             } else {
                 console.log("success");
                 setMessage('Trip updated successfully!');
-                setTripBeingEdited(null);  // Reset after saving
-                setEditedTripData(null);
+                setTripBeingEdited({});  // Reset after saving
+                setEditedTripData({});
 
                 setTripList((prevTripList) => prevTripList.map((trip) => trip === tripBeingEdited._id ? { ...trip, ...updateData } : trip))
                 searchTrip(new Event('')); // Refresh trip list
