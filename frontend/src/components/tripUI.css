@@ -224,7 +224,7 @@ body {
     justify-content: space-between;
     align-items: center;
     background-color: #ffffff;
-    padding: 15px;
+    padding: 20px;
     margin: 10px 0;
     border: 1px solid #ccc;
     border-radius: 8px;
@@ -248,7 +248,7 @@ body {
     display: flex;
     gap: 10px;
     justify-content: flex-end;
-    margin-top: 15px;
+    
   }
 
   .edit-btn {
@@ -439,3 +439,11 @@ body {
     text-align: center;
   }
   
+  input[type="date"]:before{
+    font-family: Arial, Helvetica, sans-serif;
+    content: attr(placeholder) !important;
+    color: #aaa;
+  }
+  input[type="date"]:focus:before, input[type="date"]:valid:before{
+    content: "";
+  }

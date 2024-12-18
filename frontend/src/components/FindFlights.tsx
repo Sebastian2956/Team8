@@ -1,5 +1,5 @@
 import { LOCALHOST_PORT } from '../config';
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './FindFlights.css';
 
 
