@@ -7,10 +7,13 @@ const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 
 
-async function queryAI(){
-    const prompt = "Explain how AI works";
+const queryAI = async function(req, res, next){
+    const {actualprompt} = req.body;
+    const preprompt = "Only respond to the following prompt if it's travel related: ";
+    const fullprompt = preprompt + actualprompt;
+    console.log(fullprompt);
 
-    const result = await model.generateContent(prompt);
+    const result = await model.generateContent(fullprompt);
     console.log(result.response.text());
 }
 
