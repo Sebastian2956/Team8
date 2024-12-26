@@ -6,6 +6,7 @@ const cors = require('cors'); //Cross-Origin Resource Sharing, allows/restricts 
 const bodyParser = require('body-parser'); //parses incoming request bodies in a middleware before your handlers, available under the req.body property
 const axios = require('axios')
 const flightRoutes = require('./routes/flights')
+const GeminiRoutes = require('./routes/gemini')
 
 let tripId = "0";
 
@@ -18,7 +19,8 @@ client.connect();
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
-app.use('/api',flightRoutes)
+app.use('/api',flightRoutes);
+app.use('/api/ai', GeminiRoutes);
 
 let tokenCache = {
   accessToken: null,
