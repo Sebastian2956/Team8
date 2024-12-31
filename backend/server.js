@@ -8,6 +8,8 @@ const axios = require('axios')
 const flightRoutes = require('./routes/flights')
 const GeminiRoutes = require('./routes/gemini')
 const budgetRoutes = require('./routes/budget')
+const hotelRoutes = require('./routes/hotel')
+const tripRoutes = require('./routes/trip')
 let tripId = "0";
 
 //mongodb stuff
@@ -22,6 +24,8 @@ app.use(bodyParser.json());
 app.use('/api',flightRoutes);
 app.use('/api/ai', GeminiRoutes);
 app.use('/api',budgetRoutes)
+app.use('/api',hotelRoutes)
+app.use('/api',tripRoutes)
 let tokenCache = {
   accessToken: null,
   expirationTime: null
