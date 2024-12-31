@@ -372,6 +372,9 @@ function TripUI() {
             {/* Right Panel */}
             <aside className="right-panel">
               <h2>AI Tools</h2>
+              
+                    {/* chatbox component */}
+
             </aside>
           </main>
     
