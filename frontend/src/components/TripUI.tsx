@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { LOCALHOST_PORT } from '../config';
 import './tripUI.css';
+import Chatbox from "../components/Chatbox";
 
 function TripUI() {
     const _ud: any = localStorage.getItem('user_data');
@@ -197,6 +198,7 @@ function TripUI() {
         const fetchData = async() =>{
             const obj = { userId, search };
             const js = JSON.stringify(obj);
+            console.log(js);
             try{
                 const response = await fetch( LOCALHOST_PORT + '/api/searchTrips', {
                     method: 'POST', body: js, headers: { 'Content-Type': 'application/json' }
@@ -374,6 +376,7 @@ function TripUI() {
               <h2>AI Tools</h2>
               
                     {/* chatbox component */}
+                    <Chatbox/>
 
             </aside>
           </main>
