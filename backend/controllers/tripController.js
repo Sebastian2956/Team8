@@ -3,7 +3,10 @@ const { ObjectId } = require('mongodb');
 //importing express, cors and body-parser
 const bodyParser = require('body-parser'); //parses incoming request bodies in a middleware before your handlers, available under the req.body property
 const axios = require('axios')
-
+const MongoClient = require('mongodb').MongoClient;
+                                    //password                                    //database name
+const url = process.env.MONGO_URI;
+const client = new MongoClient(url);
 
 let tokenCache = {
     accessToken: null,
@@ -81,6 +84,7 @@ const searchTrips = async (req, res, next) =>{
 
     var error = '';
     const{userId, search} = req.body;
+    console.log(req);
     var _search = search.trim();
     const db = client.db();
     //search tripName, startDate, endDate, location, description
