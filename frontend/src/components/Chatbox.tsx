@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { LOCALHOST_PORT } from "../config";
+import './tripAI.css';
 
 function Chatbox(props:any){
     const [state, setState] = useState('');
@@ -65,9 +66,10 @@ function Chatbox(props:any){
                 queryAI(e)
             }}>
                 {
-                    messageList.map((message, index: number) =>(
+                    
+                    messageList.map((message, index: number) =>( message.message != "" ?
                         <p key={index} className="ai-message">{message.message}</p>
-                    ))
+                        : (<></>)) )
                 }
                 <input type="text"  onChange={handleQueryChange}></input>
             </form>
