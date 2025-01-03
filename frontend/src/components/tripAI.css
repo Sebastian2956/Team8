@@ -1,0 +1,10 @@
+.ai-message{
+    font-size:16px;
+    white-space: pre-line;
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 12px;
+    border-color: gainsboro;
+    padding: 12px;
+    /* box-shadow: 1px 5px 36px black  */
+}
