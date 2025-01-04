@@ -1,4 +1,14 @@
+.chatbox{
+    min-height: 75%;
+    max-height: 400px;
+    overflow:scroll;
+   
+    
+
+}
+
 .ai-message{
+    display: inline-block;
     font-size:16px;
     white-space: pre-line;
     border-style: solid;
