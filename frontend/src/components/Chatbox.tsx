@@ -3,7 +3,7 @@ import { LOCALHOST_PORT } from "../config";
 import './tripAI.css';
 
 function Chatbox(props:any){
-    const [state, setState] = useState('');
+    
     const [message, setMessage] = useState('');
     const [messageList, setMessageList] = useState<any[]>([]);
 
@@ -53,7 +53,13 @@ function Chatbox(props:any){
     }
 
     function handleQueryChange(e: any): void{
-        setQuery(e.target.value);
+        if(e.key === "Enter"){
+            setQuery(e.target.value);
+            setMessageList([
+                ...messageList, 
+                {message: e.target.value}]);
+            console.log(messageList)
+        }
     }
 
 
@@ -68,6 +74,8 @@ function Chatbox(props:any){
         addAIResponse();
         Scroll()
     },[message]);
+
+    
     
 
 
@@ -77,16 +85,16 @@ function Chatbox(props:any){
             <div ref={container}className="chatbox">
                 {
                         
-                        messageList.map((message, index: number) =>( message.message != "" ?
+                        messageList.map((message, index: number) =>( index != 0 && message.message != "" ?
                             <p key={index} className="ai-message">{message.message}</p>
-                            : (<></>)) )
+                            : index > 0 && message.message == "" ?(<p key={index} className="ai-message">Not a travel related prompt!</p>) : (<></>) ))
                 }
 
             </div>
             <form onSubmit={(e) =>{
                     queryAI(e)
                 }}>
-                    <input type="text"  onChange={handleQueryChange}></input>
+                    <input type="text"  onKeyDown={handleQueryChange}></input>
             </form>
         </>
     )
