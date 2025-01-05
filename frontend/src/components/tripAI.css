@@ -8,7 +8,7 @@
 }
 
 .ai-message{
-    display: inline-block;
+    display: block;
     font-size:16px;
     white-space: pre-line;
     border-style: solid;
